@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTracker.Infrastructure.Bus", "SkillTracker.Infrastructure.Bus\SkillTracker.Infrastructure.Bus.csproj", "{18A29DD5-DC86-4F5B-8382-CA01C13D7CE9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTracker.Infrastructure.IoC", "SkillTracker.Infrastructure.IoC\SkillTracker.Infrastructure.IoC.csproj", "{EB0958DD-590F-4B22-A558-0962F01227B4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{18A29DD5-DC86-4F5B-8382-CA01C13D7CE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18A29DD5-DC86-4F5B-8382-CA01C13D7CE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18A29DD5-DC86-4F5B-8382-CA01C13D7CE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB0958DD-590F-4B22-A558-0962F01227B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB0958DD-590F-4B22-A558-0962F01227B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB0958DD-590F-4B22-A558-0962F01227B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB0958DD-590F-4B22-A558-0962F01227B4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -38,6 +44,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{DF24D653-4DED-4978-A2F1-65A0345E5952} = {25B1568B-03AD-4285-B18B-BA4382E66E47}
 		{18A29DD5-DC86-4F5B-8382-CA01C13D7CE9} = {612FA0F0-057A-4816-AD68-77C7B8C72A94}
+		{EB0958DD-590F-4B22-A558-0962F01227B4} = {334868FB-0674-4A90-A6E2-CB5A7C8877E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {536FA907-98BB-4FBD-899D-E682A78375FB}
