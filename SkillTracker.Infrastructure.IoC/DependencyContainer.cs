@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using SkillTracker.Domain.Core.Bus;
 using SkillTracker.Infrastructure.Bus;
+using SkillTracker.Profile.Application.Interfaces;
+using SkillTracker.Profile.Application.Services;
+using SkillTracker.Profile.Data.DbContext;
+using SkillTracker.Profile.Data.Repository;
+using SkillTracker.Profile.Domain.Interfaces;
 
 namespace SkillTracker.Infrastructure.IoC
 {
@@ -15,6 +20,13 @@ namespace SkillTracker.Infrastructure.IoC
         {
             //Domain Bus
             services.AddTransient<IEventBus, RabbitMQBus>();
+
+            //Application Services
+            services.AddTransient<IProfileService, ProfileService>();
+
+            //DataSource
+            services.AddTransient<IProfileRepository, ProfileRepository>();
+            services.AddTransient<ProfileDbContext>();
         }
     }
 }

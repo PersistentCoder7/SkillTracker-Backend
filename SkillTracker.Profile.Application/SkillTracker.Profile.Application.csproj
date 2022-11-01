@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SkillTracker.Profile.Domain\SkillTracker.Profile.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

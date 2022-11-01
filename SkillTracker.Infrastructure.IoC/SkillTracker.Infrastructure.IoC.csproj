@@ -13,6 +13,8 @@
   <ItemGroup>
     <ProjectReference Include="..\SkillTracker.Domain.Core\SkillTracker.Domain.Core.csproj" />
     <ProjectReference Include="..\SkillTracker.Infrastructure.Bus\SkillTracker.Infrastructure.Bus.csproj" />
+    <ProjectReference Include="..\SkillTracker.Profile.Application\SkillTracker.Profile.Application.csproj" />
+    <ProjectReference Include="..\SkillTracker.Profile.Data\SkillTracker.Profile.Data.csproj" />
   </ItemGroup>
 
 </Project>
