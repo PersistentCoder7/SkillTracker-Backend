@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SkillTracker.Domain.Core.Commands;
+using SkillTracker.Profile.Domain.Models;
 
-namespace SkillTracker.Profile.Domain.Models
+namespace SkillTracker.Profile.Domain.Commands
 {
-    public class Profile
+    public  class AddProfileCommand:Command
     {
-
-        [Key]
         public string AssociateId { get; set; }
 
         public string Name { get; set; }
@@ -18,10 +17,10 @@ namespace SkillTracker.Profile.Domain.Models
         public string Email { get; set; }
         public string Mobile { get; set; }
 
-        public DateTime? AddedOn { get; set; }
-
-        public DateTime? UpdatedOn { get; set; }
-
         public List<Skill> Skills { get; set; }
+        public AddProfileCommand()
+        {
+            
+        }
     }
 }

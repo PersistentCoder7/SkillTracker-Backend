@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SkillTracker.Profile.Application.Interfaces;
+using SkillTracker.Profile.Application.Models;
 
 namespace SkillTracker.Profile.Api.Controllers
 {
@@ -23,6 +24,13 @@ namespace SkillTracker.Profile.Api.Controllers
         {
             var profiles = await _profileService.GetProfiles();
             return Ok(profiles);
+        }
+
+        [HttpPost]
+        public IActionResult Post([FromBody] AddProfileDTO addProfileDto)
+        {
+            _profileService.AddProfile(addProfileDto); 
+            return Ok(addProfileDto);
         }
     }
 }
