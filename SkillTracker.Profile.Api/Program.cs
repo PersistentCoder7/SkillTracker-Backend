@@ -1,4 +1,5 @@
 using System.Configuration;
+using Asp.Versioning;
 using MediatR;
 using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,11 @@ builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddApiVersioning(config =>
+{
+    config.DefaultApiVersion = ApiVersion.Default;
+    config.AssumeDefaultVersionWhenUnspecified = true;
+});
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo() { Title = "Profile Service", Version ="V1"});
@@ -44,6 +50,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
 
 SubscribeToEventBus(app);
 

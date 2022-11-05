@@ -14,15 +14,10 @@ namespace SkillTracker.Infrastructure.Bus
 {
     public sealed class RabbitMQBus: IEventBus
     {
-
-        private readonly IEventBus _eventBus; IMediator _mediator;
-        //Map all the handler in the dictionary
+        private readonly IMediator _mediator;
         private readonly Dictionary<string, List<Type>> _handlers;
-
         private readonly List<Type> _eventTypes;
-
         private readonly IServiceScopeFactory _serviceScopeFactory;
-
 
         public RabbitMQBus(IMediator mediator, IServiceScopeFactory serviceScopeFactory)
         {
@@ -34,14 +29,13 @@ namespace SkillTracker.Infrastructure.Bus
 
         public Task SendCommand<T>(T command) where T : Command
         {
-            return  _mediator.Send(command);
+            return _mediator.Send(command);
         }
 
         public void Publish<T>(T @event) where T : Event
         {
-            var factory = new ConnectionFactory() { HostName = "localhost", UserName = "guest", Password = "guest", Port = 5672};
-
-            using (var connection = factory.CreateConnection()) 
+            var factory = new ConnectionFactory() { HostName = "localhost", UserName = "guest", Password = "guest", Port = 5672 };
+            using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
                 var eventName = @event.GetType().Name;
@@ -51,23 +45,23 @@ namespace SkillTracker.Infrastructure.Bus
                 var message = JsonConvert.SerializeObject(@event);
                 var body = Encoding.UTF8.GetBytes(message);
 
-                channel.BasicPublish("", eventName, null,body);
-
+                channel.BasicPublish("", eventName, null, body);
             }
+
         }
 
-        public void Subscribe<T, TH>() where T : Event where TH : IEventHandler<T>
+        public void Subscribe<T, TH>()
+            where T : Event
+            where TH : IEventHandler<T>
         {
             var eventName = typeof(T).Name;
             var handlerType = typeof(TH);
 
-            //If you haven't seen the event type before add it to the event type list
             if (!_eventTypes.Contains(typeof(T)))
             {
                 _eventTypes.Add(typeof(T));
             }
-            
-            //If the handler for the event is not found in the handler list add it to the list
+
             if (!_handlers.ContainsKey(eventName))
             {
                 _handlers.Add(eventName, new List<Type>());
@@ -75,48 +69,51 @@ namespace SkillTracker.Infrastructure.Bus
 
             if (_handlers[eventName].Any(s => s.GetType() == handlerType))
             {
-                throw new ArgumentException($"Handler type {handlerType.Name} already registered for '{eventName}");
+                throw new ArgumentException(
+                    $"Handler Type {handlerType.Name} already is registered for '{eventName}'", nameof(handlerType));
             }
 
             _handlers[eventName].Add(handlerType);
 
             StartBasicConsume<T>();
-
         }
 
         private void StartBasicConsume<T>() where T : Event
         {
-            var factory = new ConnectionFactory() { HostName = "localhost", UserName = "guest", Password = "guest", Port = 5672,DispatchConsumersAsync = true};
-
-            using (var connection = factory.CreateConnection())
-            using (var channel = connection.CreateModel())
+            var factory = new ConnectionFactory()
             {
-                var eventName = typeof(T).Name;
+                HostName = "localhost",
+                UserName = "guest",
+                Password = "guest",
+                Port = 5672,
+                DispatchConsumersAsync = true
+            };
 
-                channel.QueueDeclare(eventName, true, false, false, null);
+            var connection = factory.CreateConnection();
+            var channel = connection.CreateModel();
 
+            var eventName = typeof(T).Name;
 
-                var consumer = new AsyncEventingBasicConsumer(channel);
-                consumer.Received += Consumer_Received;
-                channel.BasicConsume(eventName, true, consumer);
-            }
+            channel.QueueDeclare(eventName, true, false, false, null);
+
+            var consumer = new AsyncEventingBasicConsumer(channel);
+            consumer.Received += Consumer_Received;
+
+            channel.BasicConsume(eventName, true, consumer);
         }
 
-        private async Task Consumer_Received(object sender, BasicDeliverEventArgs @event)
+        private async Task Consumer_Received(object sender, BasicDeliverEventArgs e)
         {
-            var eventName = @event.RoutingKey;
+            var eventName = e.RoutingKey;
+            var message = Encoding.UTF8.GetString(e.Body.ToArray());
 
-            var message = Encoding.UTF8.GetString(@event.Body.ToArray());
             try
             {
                 await ProcessEvent(eventName, message).ConfigureAwait(false);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine(e);
-                throw;
             }
-           ;
         }
 
         private async Task ProcessEvent(string eventName, string message)
@@ -132,14 +129,12 @@ namespace SkillTracker.Infrastructure.Bus
                         if (handler == null) continue;
                         var eventType = _eventTypes.SingleOrDefault(t => t.Name == eventName);
                         var @event = JsonConvert.DeserializeObject(message, eventType);
-
-                        var concretwType = typeof(IEventHandler<>).MakeGenericType(eventType);
-
-                        await (Task)concretwType.GetMethod("Handle").Invoke(handler, new object[] { @event });
+                        var conreteType = typeof(IEventHandler<>).MakeGenericType(eventType);
+                        await (Task)conreteType.GetMethod("Handle").Invoke(handler, new object[] { @event });
                     }
-
                 }
             }
         }
+
     }
 }

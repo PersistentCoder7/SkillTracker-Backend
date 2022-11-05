@@ -39,5 +39,10 @@ namespace SkillTracker.Profile.Application.Services
             };
             _bus.SendCommand(addProfileCommand);
         }
+
+        public async Task<Domain.Models.Profile> GetProfile(string id)
+        {
+           return await _profileRepository.GetProfile(id);
+        }
     }
 }

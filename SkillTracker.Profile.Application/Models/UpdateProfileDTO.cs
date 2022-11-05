@@ -8,5 +8,6 @@ namespace SkillTracker.Profile.Application.Models
 {
     public class UpdateProfileDTO
     {
+        public string ProfileId { get; set; }
     }
 }

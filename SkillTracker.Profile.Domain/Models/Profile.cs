@@ -23,5 +23,7 @@ namespace SkillTracker.Profile.Domain.Models
         public DateTime? UpdatedOn { get; set; }
 
         public List<Skill> Skills { get; set; }
+
+        //public string UserId { get; set; }
     }
 }

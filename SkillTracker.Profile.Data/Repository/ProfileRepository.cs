@@ -29,5 +29,10 @@ namespace SkillTracker.Profile.Data.Repository
         {
             return await _profileDbContext.Profiles.ToListAsync();
         }
+
+        public async Task<Domain.Models.Profile> GetProfile(string id)
+        {
+            return await _profileDbContext.Profiles.FirstOrDefaultAsync(p => p.AssociateId == id);
+        }
     }
 }
