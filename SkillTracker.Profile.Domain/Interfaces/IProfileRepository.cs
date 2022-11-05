@@ -8,7 +8,7 @@ namespace SkillTracker.Profile.Domain.Interfaces
 {
     public  interface IProfileRepository
     {
-        //Task<ProfileEntity> SaveProfile(ProfileEntity profile);
+        Task<Models.Profile> SaveProfile(Models.Profile profile);
         Task<IEnumerable<Models.Profile>> GetAllProfiles();
         //ProfileEntity GetProfile(string id);
         //void DeleteProfile(string id);

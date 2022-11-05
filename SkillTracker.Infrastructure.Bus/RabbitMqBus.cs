@@ -2,6 +2,7 @@
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -20,10 +21,13 @@ namespace SkillTracker.Infrastructure.Bus
 
         private readonly List<Type> _eventTypes;
 
+        private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public RabbitMQBus(IMediator mediator)
+
+        public RabbitMQBus(IMediator mediator, IServiceScopeFactory serviceScopeFactory)
         {
             _mediator = mediator;
+            _serviceScopeFactory = serviceScopeFactory;
             _handlers = new Dictionary<string, List<Type>>();
             _eventTypes = new List<Type>();
         }
@@ -35,19 +39,19 @@ namespace SkillTracker.Infrastructure.Bus
 
         public void Publish<T>(T @event) where T : Event
         {
-            var factory = new ConnectionFactory() { HostName = "localhost"};
+            var factory = new ConnectionFactory() { HostName = "localhost", UserName = "guest", Password = "guest", Port = 5672};
 
             using (var connection = factory.CreateConnection()) 
             using (var channel = connection.CreateModel())
             {
                 var eventName = @event.GetType().Name;
 
-                channel.QueueDeclare(eventName, false, false, false, null);
+                channel.QueueDeclare(eventName, true, false, false, null);
 
-                var message = JsonConvert.SerializeObject(@eventName);
+                var message = JsonConvert.SerializeObject(@event);
                 var body = Encoding.UTF8.GetBytes(message);
 
-                channel.BasicPublish("",eventName, null,body);
+                channel.BasicPublish("", eventName, null,body);
 
             }
         }
@@ -82,14 +86,14 @@ namespace SkillTracker.Infrastructure.Bus
 
         private void StartBasicConsume<T>() where T : Event
         {
-            var factory = new ConnectionFactory() { HostName = "localhost", DispatchConsumersAsync = true};
+            var factory = new ConnectionFactory() { HostName = "localhost", UserName = "guest", Password = "guest", Port = 5672,DispatchConsumersAsync = true};
 
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
                 var eventName = typeof(T).Name;
 
-                channel.QueueDeclare(eventName, false, false, false, null);
+                channel.QueueDeclare(eventName, true, false, false, null);
 
 
                 var consumer = new AsyncEventingBasicConsumer(channel);
@@ -117,20 +121,25 @@ namespace SkillTracker.Infrastructure.Bus
 
         private async Task ProcessEvent(string eventName, string message)
         {
-            var subscriptions = _handlers[eventName];
-            foreach (var subscription in subscriptions)
+            if (_handlers.ContainsKey(eventName))
             {
-                var handler = Activator.CreateInstance(subscription);
-                if(handler == null) continue;
-                var eventType = _eventTypes.SingleOrDefault(t => t.Name == eventName);
-                var @event = JsonConvert.DeserializeObject(message,eventType);
+                using (var scope = _serviceScopeFactory.CreateScope())
+                {
+                    var subscriptions = _handlers[eventName];
+                    foreach (var subscription in subscriptions)
+                    {
+                        var handler = scope.ServiceProvider.GetService(subscription);
+                        if (handler == null) continue;
+                        var eventType = _eventTypes.SingleOrDefault(t => t.Name == eventName);
+                        var @event = JsonConvert.DeserializeObject(message, eventType);
 
-                var concretwType = typeof(IEventHandler<>).MakeGenericType(eventType);
+                        var concretwType = typeof(IEventHandler<>).MakeGenericType(eventType);
 
-                await (Task)concretwType.GetMethod("Handle").Invoke(handler, new object[] { @event });
+                        await (Task)concretwType.GetMethod("Handle").Invoke(handler, new object[] { @event });
+                    }
+
+                }
             }
-
-
         }
     }
 }

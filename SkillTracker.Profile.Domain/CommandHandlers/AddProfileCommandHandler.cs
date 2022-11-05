@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 using SkillTracker.Domain.Core.Bus;
 using SkillTracker.Profile.Domain.Commands;
+using SkillTracker.Profile.Domain.Events;
 
 namespace SkillTracker.Profile.Domain.CommandHandlers
 {
@@ -17,10 +19,18 @@ namespace SkillTracker.Profile.Domain.CommandHandlers
         {
             _bus = bus;
         }
-        public Task<bool> Handle(AddProfileCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(AddProfileCommand request, CancellationToken cancellationToken)
         {
 
-            return Task.FromResult(true);
+            _bus.Publish<AddedProfileEvent>(new AddedProfileEvent()
+            {
+                 Name = request.Name,
+                 Email = request.Email,
+                 AssociateId = request.AssociateId,
+                 Skills = request.Skills,
+                 Mobile = request.Mobile
+            });
+            return await Task.FromResult(true);
         }
     }
 }

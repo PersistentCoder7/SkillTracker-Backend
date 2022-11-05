@@ -13,16 +13,31 @@ using SkillTracker.Profile.Data.DbContext;
 using SkillTracker.Profile.Data.Repository;
 using SkillTracker.Profile.Domain.CommandHandlers;
 using SkillTracker.Profile.Domain.Commands;
+using SkillTracker.Profile.Domain.EventHandlers;
+using SkillTracker.Profile.Domain.Events;
 using SkillTracker.Profile.Domain.Interfaces;
 
 namespace SkillTracker.Infrastructure.IoC
 {
-    public  class DependencyContainer
+    public static  class DependencyContainer
     {
-        public static void RegisterServices(IServiceCollection services)
+        public static void RegisterCustomServices(this IServiceCollection services)
         {
+
             //Domain Bus
-            services.AddTransient<IEventBus, RabbitMQBus>();
+            services.AddSingleton<IEventBus, RabbitMQBus>(sp =>
+            {
+                var scopeFactory = sp.GetRequiredService<IServiceScopeFactory>();
+                return new RabbitMQBus(sp.GetService<IMediator>(), scopeFactory);
+            });
+            
+            //Subscriptions
+            services.AddTransient<AddedProfileEventHandler>();
+
+
+            //Register Events
+            services.AddTransient<IEventHandler<AddedProfileEvent>, AddedProfileEventHandler>();
+
 
             //Register Commands 
             services.AddTransient<IRequestHandler<AddProfileCommand, bool>, AddProfileCommandHandler>();

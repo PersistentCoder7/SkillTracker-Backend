@@ -17,6 +17,14 @@ namespace SkillTracker.Profile.Data.Repository
         {
                 _profileDbContext = profileDbContext;
         }
+
+        public async Task<Domain.Models.Profile> SaveProfile(Domain.Models.Profile profile)
+        {
+            _profileDbContext.Profiles.Add(profile);
+            await _profileDbContext.SaveChangesAsync();
+            return await Task.FromResult(profile);
+        }
+
         public async Task<IEnumerable<Domain.Models.Profile>> GetAllProfiles()
         {
             return await _profileDbContext.Profiles.ToListAsync();
