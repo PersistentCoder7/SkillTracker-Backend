@@ -8,6 +8,7 @@ using SkillTracker.Profile.Application.Helpers;
 using SkillTracker.Profile.Application.Interfaces;
 using SkillTracker.Profile.Application.Models;
 using SkillTracker.Profile.Domain.Commands;
+using SkillTracker.Profile.Domain.Events;
 using SkillTracker.Profile.Domain.Interfaces;
 
 namespace SkillTracker.Profile.Application.Services
@@ -54,6 +55,16 @@ namespace SkillTracker.Profile.Application.Services
                 Skills = updateProfileDto.Skills.GetSkills(updateProfileDto.AssociateId)
             };
             _bus.SendCommand(updateProfileCommand);
+        }
+
+        public async Task<List<Domain.Models.Profile>> Search(SearchProfileDTO searchProfileDto)
+        {
+            return await _profileRepository.Search(new SearchProfileEvent()
+            {
+                AssociateId = searchProfileDto.AssociateId,
+                Name = searchProfileDto.Name,
+                Skill = searchProfileDto.Skill
+            });
         }
     }
 }

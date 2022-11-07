@@ -1,5 +1,4 @@
 using System.Net;
-using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 using SkillTracker.Profile.Application.Interfaces;
 using SkillTracker.Profile.Application.Models;

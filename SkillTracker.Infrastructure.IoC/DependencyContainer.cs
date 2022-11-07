@@ -34,15 +34,17 @@ namespace SkillTracker.Infrastructure.IoC
             //Subscriptions
             services.AddTransient<AddedProfileEventHandler>();
             services.AddTransient<UpdatedProfileEventHandler>();
+            //services.AddTransient<SearchProfileEventHandler>();
 
             //Register Events
             services.AddTransient<IEventHandler<AddedProfileEvent>, AddedProfileEventHandler>();
             services.AddTransient<IEventHandler<UpdatedProfileEvent>, UpdatedProfileEventHandler>();
+            //services.AddTransient<IEventHandler<SearchProfileEvent>, SearchProfileEventHandler>();
 
             //Register Commands 
             services.AddTransient<IRequestHandler<AddProfileCommand, bool>, AddProfileCommandHandler>();
             services.AddTransient<IRequestHandler<UpdateProfileCommand, bool>, UpdateProfileCommandHandler>();
-
+            //services.AddTransient<IRequestHandler<SearchProfileCommand, bool>, SearchProfileCommandHandler>();
 
             //Application Services
             services.AddTransient<IProfileService, ProfileService>();

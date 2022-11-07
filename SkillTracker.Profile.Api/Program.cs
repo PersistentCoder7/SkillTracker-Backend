@@ -1,6 +1,7 @@
 using System.Configuration;
-using Asp.Versioning;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -17,18 +18,25 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddApiVersioning(config =>
-{
-    config.DefaultApiVersion = ApiVersion.Default;
-    config.AssumeDefaultVersionWhenUnspecified = true;
-    
-});
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo() { Title = "Profile Service", Version ="V1"});
-});
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddApiVersioning(config =>
+    {
+        config.DefaultApiVersion = new ApiVersion(1,0);
+        config.AssumeDefaultVersionWhenUnspecified = true;
+        config.ReportApiVersions = true;
+        config.ApiVersionReader = new UrlSegmentApiVersionReader();
+    });
+    builder.Services.AddSwaggerGen(c =>
+    {
+        c.SwaggerDoc("v1", new OpenApiInfo() { Title = "Profile Service", Version ="V1"});
+    });
 
+//builder.Services.AddVersionedApiExplorer(
+//    options =>
+//    {
+//        options.GroupNameFormat = "'v'VVV";
+//        options.SubstituteApiVersionInUrl = true;
+//});
 builder.Services.AddMediatR(typeof(Program));
 
 RegisterServices(builder.Services, builder.Configuration);
@@ -42,7 +50,8 @@ var app = builder.Build();
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Profile Microservice V1");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "SkillTracker Microservice V1");
+       
     });
 //}
 
@@ -65,6 +74,7 @@ void SubscribeToEventBus(WebApplication webApplication)
     var eventBus = app.Services.GetRequiredService<IEventBus>();
     eventBus.Subscribe<AddedProfileEvent, AddedProfileEventHandler>();
     eventBus.Subscribe<UpdatedProfileEvent, UpdatedProfileEventHandler>();
+    eventBus.Subscribe<SearchProfileEvent, SearchProfileEventHandler>();
 }
 
 
