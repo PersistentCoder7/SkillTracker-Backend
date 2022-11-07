@@ -67,7 +67,8 @@ namespace SkillTracker.Profile.Data.Repository
                 if (z!=null) z.AddRange(z);
             }
             
-            return await Task.FromResult(result) ;
+            result.ForEach(x=> x.Skills = x.Skills.OrderByDescending(y=> y.Proficiency).ToList());
+            return await Task.FromResult(result);
         }
     }
 }
