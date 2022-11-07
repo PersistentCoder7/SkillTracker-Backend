@@ -20,7 +20,15 @@ namespace SkillTracker.Profile.Data.Repository
 
         public async Task<Domain.Models.Profile> SaveProfile(Domain.Models.Profile profile)
         {
-            _profileDbContext.Profiles.Add(profile);
+            if (profile.UpdatedOn != null)
+            {
+                _profileDbContext.Entry(profile).State = EntityState.Modified;
+            }
+            else
+            {
+                _profileDbContext.Profiles.Add(profile);
+            }
+            
             await _profileDbContext.SaveChangesAsync();
             return await Task.FromResult(profile);
         }

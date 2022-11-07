@@ -12,5 +12,6 @@ namespace SkillTracker.Profile.Application.Interfaces
         public Task<IEnumerable<Domain.Models.Profile>> GetProfiles();
         public void AddProfile(AddProfileDTO addProfileDto);
         public Task<Domain.Models.Profile> GetProfile(string id);
+        public void UpdateProfile(UpdateProfileDTO updateProfileDto);
     }
 }

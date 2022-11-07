@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SkillTracker.Domain.Core.Bus;
+using SkillTracker.Profile.Application.Helpers;
 using SkillTracker.Profile.Application.Interfaces;
 using SkillTracker.Profile.Application.Models;
 using SkillTracker.Profile.Domain.Commands;
@@ -35,7 +36,7 @@ namespace SkillTracker.Profile.Application.Services
                 Email = addProfileDto.Email,
                 Name = addProfileDto.Name,
                 Mobile = addProfileDto.Mobile,
-                Skills = addProfileDto.Skills
+                Skills = addProfileDto.Skills.GetSkills(associateId:addProfileDto.AssociateId)
             };
             _bus.SendCommand(addProfileCommand);
         }
@@ -43,6 +44,16 @@ namespace SkillTracker.Profile.Application.Services
         public async Task<Domain.Models.Profile> GetProfile(string id)
         {
            return await _profileRepository.GetProfile(id);
+        }
+
+        public void UpdateProfile(UpdateProfileDTO updateProfileDto)
+        {
+            var updateProfileCommand = new UpdateProfileCommand()
+            {
+                AssociateId = updateProfileDto.AssociateId,
+                Skills = updateProfileDto.Skills.GetSkills(updateProfileDto.AssociateId)
+            };
+            _bus.SendCommand(updateProfileCommand);
         }
     }
 }

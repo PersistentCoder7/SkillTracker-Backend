@@ -31,13 +31,7 @@ namespace SkillTracker.Profile.Api.Controllers
             if (profile == null) return NotFound();
             return Ok(profile);
         }
-
-        //public async Task<ActionResult<IEnumerable<Domain.Models.Profile>>> Get()
-        //{
-        //    var profiles = await _profileService.GetProfiles();
-        //    return Ok(profiles);
-        //}
-
+        
         [HttpPost(Name = "AddProfile")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public IActionResult Post([FromBody] AddProfileDTO addProfileDto)
@@ -46,21 +40,28 @@ namespace SkillTracker.Profile.Api.Controllers
             return Ok(addProfileDto);
         }
 
-        //[HttpPut(Name = "UpdateProfile")]
-        //[ProducesResponseType((int)HttpStatusCode.OK)]
-        //[ProducesResponseType(StatusCodes.Status204NoContent)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[ProducesDefaultResponseType]
-        //public async Task<ActionResult<int>> UpdateProfile([FromBody] UpdateProfileDTO updateProfileDto, [FromHeader(Name = "x-userid")] string userid)
-        //{
-        //    //if (string.IsNullOrWhiteSpace(userId))
-        //    //{
-        //    //    var errors = new List<ValidationFailure> { new ValidationFailure("", "UserId header missing") };
-        //    //    throw new FluentValidation.ValidationException(errors);
-        //    //}
+        [HttpPut(Name = "UpdateProfile")]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<int>> UpdateProfile([FromBody] UpdateProfileDTO updateProfileDto, [FromHeader(Name = "x-userid")] string userid)
+        {
+            //if (string.IsNullOrWhiteSpace(userId))
+            //{
+            //    var errors = new List<ValidationFailure> { new ValidationFailure("", "UserId header missing") };
+            //    throw new FluentValidation.ValidationException(errors);
+            //}
+            //TODO: Ensure that the UserId is not blank
+            userid = "2";
+            var associateId = userid;
 
-        //    //await _mediator.Send(command);
-        //    return Ok();
-        //}
+            var profile = await _profileService.GetProfile(associateId);
+            if (profile==null) return NotFound();
+            
+            _profileService.UpdateProfile(updateProfileDto);
+            
+            return Ok();
+        }
     }
 }

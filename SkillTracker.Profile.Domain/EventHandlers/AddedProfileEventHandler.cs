@@ -29,7 +29,7 @@ namespace SkillTracker.Profile.Domain.EventHandlers
                     Name = @event.Name,
                     Skills = @event.Skills,
                     AddedOn = @event.AddedOn,
-                    UpdatedOn = @event.UpdatedOn//,
+                    UpdatedOn = @event.UpdatedOn
                     //UserId = Guid.NewGuid().ToString()
                     
                 }

@@ -22,6 +22,7 @@ builder.Services.AddApiVersioning(config =>
 {
     config.DefaultApiVersion = ApiVersion.Default;
     config.AssumeDefaultVersionWhenUnspecified = true;
+    
 });
 builder.Services.AddSwaggerGen(c =>
 {
@@ -63,6 +64,7 @@ void SubscribeToEventBus(WebApplication webApplication)
 {
     var eventBus = app.Services.GetRequiredService<IEventBus>();
     eventBus.Subscribe<AddedProfileEvent, AddedProfileEventHandler>();
+    eventBus.Subscribe<UpdatedProfileEvent, UpdatedProfileEventHandler>();
 }
 
 

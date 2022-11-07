@@ -8,19 +8,13 @@ using SkillTracker.Profile.Domain.Models;
 
 namespace SkillTracker.Profile.Application.Models
 {
-    public class AddProfileDTO
+    public class AddSkillsDTO
     {
-        [Required]
-        public string AssociateId { get; set; }
-
-        [Required]
+        [Required(ErrorMessage = "Skill Name is required")]
         public string Name { get; set; }
 
-        [Required]
-        public string Email { get; set; }
-        [Required]
-        public string Mobile { get; set; }
-        [Required]
-        public List<AddSkillsDTO> Skills { get; set; }
+        [Required(ErrorMessage = "Proficiency is required")]
+        [Range(1, 20, ErrorMessage = "Invalid Proficiency: Range 1 to 20")]
+        public int Proficiency { get; set; }
     }
 }
