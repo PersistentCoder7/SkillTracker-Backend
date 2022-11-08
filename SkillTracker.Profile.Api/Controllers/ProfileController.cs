@@ -8,6 +8,7 @@ namespace SkillTracker.Profile.Api.Controllers
     [ApiVersion("1.0")]
     [Route("skill-tracker/api/v{version:apiVersion}/engineer")]
     [Produces("application/json")]
+    [ApiController]
     public class ProfileController : ControllerBase
     {
         private readonly IProfileService _profileService;
@@ -21,6 +22,7 @@ namespace SkillTracker.Profile.Api.Controllers
             _logger = logger;
         }
 
+        
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(Domain.Models.Profile), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Domain.Models.Profile), (int)HttpStatusCode.NotFound)]

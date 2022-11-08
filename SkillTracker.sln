@@ -11,13 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure.IoC", "Infra
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Microservices", "Microservices", "{B03FDCAD-3FAE-4D4C-BDE1-E15331A9F288}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTracker.Domain.Core", "SkillTracker.Domain.Core\SkillTracker.Domain.Core.csproj", "{DF24D653-4DED-4978-A2F1-65A0345E5952}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkillTracker.Domain.Core", "SkillTracker.Domain.Core\SkillTracker.Domain.Core.csproj", "{DF24D653-4DED-4978-A2F1-65A0345E5952}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{BFC10B12-A4DD-4BAC-B9F0-D85E0E3284D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkillTracker.Infrastructure.Bus", "SkillTracker.Infrastructure.Bus\SkillTracker.Infrastructure.Bus.csproj", "{18A29DD5-DC86-4F5B-8382-CA01C13D7CE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTracker.Infrastructure.Bus", "SkillTracker.Infrastructure.Bus\SkillTracker.Infrastructure.Bus.csproj", "{18A29DD5-DC86-4F5B-8382-CA01C13D7CE9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTracker.Infrastructure.IoC", "SkillTracker.Infrastructure.IoC\SkillTracker.Infrastructure.IoC.csproj", "{EB0958DD-590F-4B22-A558-0962F01227B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkillTracker.Infrastructure.IoC", "SkillTracker.Infrastructure.IoC\SkillTracker.Infrastructure.IoC.csproj", "{EB0958DD-590F-4B22-A558-0962F01227B4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Profile", "Profile", "{F3E9CCC9-23D2-4A42-BCDB-516542C53898}"
 EndProject
@@ -29,13 +27,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{C9830FDA-1
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{F1562A19-ABF6-45F4-8272-3F8DF5B9FBE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTracker.Profile.Api", "SkillTracker.Profile.Api\SkillTracker.Profile.Api.csproj", "{0B909454-1F95-47EE-A418-BDDCBF309D0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkillTracker.Profile.Api", "SkillTracker.Profile.Api\SkillTracker.Profile.Api.csproj", "{0B909454-1F95-47EE-A418-BDDCBF309D0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTracker.Profile.Application", "SkillTracker.Profile.Application\SkillTracker.Profile.Application.csproj", "{201B7EAC-1A39-4A77-904D-70CA8CBA6BA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkillTracker.Profile.Application", "SkillTracker.Profile.Application\SkillTracker.Profile.Application.csproj", "{201B7EAC-1A39-4A77-904D-70CA8CBA6BA9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTracker.Profile.Data", "SkillTracker.Profile.Data\SkillTracker.Profile.Data.csproj", "{6952C1EC-E724-490A-B47B-1A27AA06D0DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkillTracker.Profile.Data", "SkillTracker.Profile.Data\SkillTracker.Profile.Data.csproj", "{6952C1EC-E724-490A-B47B-1A27AA06D0DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTracker.Profile.Domain", "SkillTracker.Profile.Domain\SkillTracker.Profile.Domain.csproj", "{4BBD2BA6-C7DF-471D-9225-34C0ED66321E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkillTracker.Profile.Domain", "SkillTracker.Profile.Domain\SkillTracker.Profile.Domain.csproj", "{4BBD2BA6-C7DF-471D-9225-34C0ED66321E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Containerization", "Containerization", "{2E4CF570-83C4-4266-BBE2-6320C6CA532C}"
+	ProjectSection(SolutionItems) = preProject
+		Dockerfile.txt = Dockerfile.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

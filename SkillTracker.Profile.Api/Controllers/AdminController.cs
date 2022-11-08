@@ -6,6 +6,7 @@ using SkillTracker.Profile.Application.Models;
 
 namespace SkillTracker.Profile.Api.Controllers
 {
+    [ApiController]
     [ApiVersion("1.0")]
     [Route("skill-tracker/api/v{version:apiVersion}/admin")]
     [Produces("application/json")]

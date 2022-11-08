@@ -31,12 +31,12 @@ builder.Services.AddControllers();
         c.SwaggerDoc("v1", new OpenApiInfo() { Title = "Profile Service", Version ="V1"});
     });
 
-//builder.Services.AddVersionedApiExplorer(
-//    options =>
-//    {
-//        options.GroupNameFormat = "'v'VVV";
-//        options.SubstituteApiVersionInUrl = true;
-//});
+builder.Services.AddVersionedApiExplorer(
+    options =>
+    {
+        options.GroupNameFormat = "'v'VVV";
+        options.SubstituteApiVersionInUrl = true;
+    });
 builder.Services.AddMediatR(typeof(Program));
 
 RegisterServices(builder.Services, builder.Configuration);
@@ -56,11 +56,8 @@ var app = builder.Build();
 //}
 
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 
 SubscribeToEventBus(app);
 
@@ -74,7 +71,7 @@ void SubscribeToEventBus(WebApplication webApplication)
     var eventBus = app.Services.GetRequiredService<IEventBus>();
     eventBus.Subscribe<AddedProfileEvent, AddedProfileEventHandler>();
     eventBus.Subscribe<UpdatedProfileEvent, UpdatedProfileEventHandler>();
-    eventBus.Subscribe<SearchProfileEvent, SearchProfileEventHandler>();
+    //eventBus.Subscribe<SearchProfileEvent, SearchProfileEventHandler>();
 }
 
 
@@ -116,19 +113,3 @@ void ConfigureCosmosDb(IServiceCollection services, IConfiguration configuration
     //});
 }
 
-//public static IServiceCollection ConfigureEventBus(this IServiceCollection services, IConfiguration configuration)
-//{
-//    services.AddMassTransit(config =>
-//    {
-//        config.UsingRabbitMq((ctx, cfg) =>
-//        {
-//            cfg.Host(configuration["EventBusSettings:HostAddress"], c =>
-//            {
-//                c.Username(configuration["EventBusSettings:username"]);
-//                c.Password(configuration["EventBusSettings:password"]);
-//            });
-//        });
-//    });
-//    services.AddMassTransitHostedService();
-//    return services;
-//}

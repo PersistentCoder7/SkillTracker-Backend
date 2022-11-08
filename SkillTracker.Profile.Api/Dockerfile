@@ -7,7 +7,13 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["SkillTracker.Profile.Api/SkillTracker.Profile.Api.csproj", "SkillTracker.Profile.Api/"]
+COPY 
+COPY ["SkillTracker.Profile.Api/SkillTracker.Profile.Api.csproj", "Microservices/Profile/Api/SkillTracker.Profile.Api/"]
+COPY ["../SkillTracker.Profile.Api/SkillTracker.Profile.Api.csproj", "Microservices/Profile/Application/SkillTracker.Profile.Application"]
+COPY ["SkillTracker.Profile.Api/SkillTracker.Profile.Api.csproj", "Microservices/Profile/Api/SkillTracker.Profile.Api/"]
+COPY ["SkillTracker.Profile.Api/SkillTracker.Profile.Api.csproj", "Microservices/Profile/Api/SkillTracker.Profile.Api/"]
+COPY ["SkillTracker.Profile.Api/SkillTracker.Profile.Api.csproj", "Microservices/Profile/Api/SkillTracker.Profile.Api/"]
+
 RUN dotnet restore "SkillTracker.Profile.Api/SkillTracker.Profile.Api.csproj"
 COPY . .
 WORKDIR "/src/SkillTracker.Profile.Api"
