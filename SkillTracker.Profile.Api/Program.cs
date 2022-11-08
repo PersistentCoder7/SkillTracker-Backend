@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using SkillTracker.Domain.Core.Bus;
 using SkillTracker.Infrastructure.IoC;
+using SkillTracker.Profile.Api.Infrastructure.ExceptionHandlers;
 using SkillTracker.Profile.Data.DbContext;
 using SkillTracker.Profile.Domain.EventHandlers;
 using SkillTracker.Profile.Domain.Events;
@@ -41,6 +42,8 @@ builder.Services.AddMediatR(typeof(Program));
 
 RegisterServices(builder.Services, builder.Configuration);
 
+builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
+
 var app = builder.Build();
 
 
@@ -57,6 +60,8 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
+
+app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 app.MapControllers();
 
 SubscribeToEventBus(app);

@@ -1,5 +1,6 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using SkillTracker.Profile.Api.Infrastructure.Exceptions;
 using SkillTracker.Profile.Application.Interfaces;
 using SkillTracker.Profile.Application.Models;
 
@@ -48,11 +49,12 @@ namespace SkillTracker.Profile.Api.Controllers
         [ProducesDefaultResponseType]
         public async Task<ActionResult<int>> UpdateProfile([FromBody] UpdateProfileDTO updateProfileDto, [FromHeader(Name = "x-userid")] string userid)
         {
-            //if (string.IsNullOrWhiteSpace(userId))
-            //{
-            //    var errors = new List<ValidationFailure> { new ValidationFailure("", "UserId header missing") };
-            //    throw new FluentValidation.ValidationException(errors);
-            //}
+            if (string.IsNullOrWhiteSpace(userid))
+            {
+                throw new SkillTrackerDomainException("UserId header is missing");
+                //var errors = new List<ValidationFailure> { new ValidationFailure("", "UserId header missing") };
+                //throw new FluentValidation.ValidationException(errors);
+            }
             //TODO: Ensure that the UserId is not blank
             userid = "2";
             var associateId = userid;
