@@ -14,7 +14,7 @@ namespace SkillTracker.Profile.Application.Models
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Proficiency is required")]
-        [Range(1, 20, ErrorMessage = "Invalid Proficiency: Range 1 to 20")]
+        [Range(0, 20, ErrorMessage = "Invalid Proficiency: Range 1 to 20")]
         public int Proficiency { get; set; }
     }
 }

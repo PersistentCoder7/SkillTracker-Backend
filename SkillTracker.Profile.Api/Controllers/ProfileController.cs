@@ -36,6 +36,8 @@ namespace SkillTracker.Profile.Api.Controllers
         
         [HttpPost(Name = "AddProfile")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Created)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public IActionResult Post([FromBody] AddProfileDTO addProfileDto)
         {
             _profileService.AddProfile(addProfileDto);
@@ -46,6 +48,7 @@ namespace SkillTracker.Profile.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesDefaultResponseType]
         public async Task<ActionResult<int>> UpdateProfile([FromBody] UpdateProfileDTO updateProfileDto, [FromHeader(Name = "x-userid")] string userid)
         {
@@ -56,11 +59,18 @@ namespace SkillTracker.Profile.Api.Controllers
                 //throw new FluentValidation.ValidationException(errors);
             }
             //TODO: Ensure that the UserId is not blank
-            userid = "2";
+            
             var associateId = userid;
 
             var profile = await _profileService.GetProfile(associateId);
             if (profile==null) return NotFound();
+            
+            var currentDate=DateTime.Now;
+            if (currentDate.Subtract(profile.UpdatedOn.Value).Days < 10 ||
+                currentDate.Subtract(profile.AddedOn.Value).Days < 10)
+            {
+                throw new SkillTrackerDomainException("The profile can be updated only after 10 days of adding or updating the profile");
+            }
             
             _profileService.UpdateProfile(updateProfileDto);
             

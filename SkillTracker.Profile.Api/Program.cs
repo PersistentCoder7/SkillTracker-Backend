@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using SkillTracker.Domain.Core.Bus;
 using SkillTracker.Infrastructure.IoC;
+using SkillTracker.Profile.Api.Extensions;
 using SkillTracker.Profile.Api.Infrastructure.ExceptionHandlers;
 using SkillTracker.Profile.Data.DbContext;
 using SkillTracker.Profile.Domain.EventHandlers;
@@ -15,29 +16,10 @@ using SkillTracker.Profile.Domain.Events;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddApiVersioning(config =>
-    {
-        config.DefaultApiVersion = new ApiVersion(1,0);
-        config.AssumeDefaultVersionWhenUnspecified = true;
-        config.ReportApiVersions = true;
-        config.ApiVersionReader = new UrlSegmentApiVersionReader();
-    });
-    builder.Services.AddSwaggerGen(c =>
-    {
-        c.SwaggerDoc("v1", new OpenApiInfo() { Title = "Profile Service", Version ="V1"});
-    });
+builder.AddSwaggerConfiguration();
 
-builder.Services.AddVersionedApiExplorer(
-    options =>
-    {
-        options.GroupNameFormat = "'v'VVV";
-        options.SubstituteApiVersionInUrl = true;
-    });
 builder.Services.AddMediatR(typeof(Program));
 
 RegisterServices(builder.Services, builder.Configuration);
@@ -65,7 +47,6 @@ app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 app.MapControllers();
 
 SubscribeToEventBus(app);
-
 
 app.Run();
 
