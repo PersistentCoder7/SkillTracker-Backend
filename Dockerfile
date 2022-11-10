@@ -10,7 +10,6 @@ WORKDIR /src
 COPY *.sln .
 COPY SkillTracker.Domain.Core/SkillTracker.Domain.Core.csproj SkillTracker.Domain.Core/
 COPY SkillTracker.Infrastructure.Bus/SkillTracker.Infrastructure.Bus.csproj SkillTracker.Infrastructure.Bus/
-COPY SkillTracker.Infrastructure.IoC/SkillTracker.Infrastructure.IoC.csproj SkillTracker.Infrastructure.IoC/
 COPY SkillTracker.Profile.Api/SkillTracker.Profile.Api.csproj SkillTracker.Profile.Api/
 COPY SkillTracker.Profile.Application/SkillTracker.Profile.Application.csproj SkillTracker.Profile.Application/
 COPY SkillTracker.Profile.Data/SkillTracker.Profile.Data.csproj SkillTracker.Profile.Data/
@@ -20,7 +19,6 @@ COPY SkillTracker.Profile.Domain/SkillTracker.Profile.Domain.csproj SkillTracker
 
 RUN dotnet restore "SkillTracker.Domain.Core/SkillTracker.Domain.Core.csproj"
 RUN dotnet restore "SkillTracker.Infrastructure.Bus/SkillTracker.Infrastructure.Bus.csproj"
-RUN dotnet restore "SkillTracker.Infrastructure.IoC/SkillTracker.Infrastructure.IoC.csproj"
 RUN dotnet restore "SkillTracker.Profile.Api/SkillTracker.Profile.Api.csproj"
 RUN dotnet restore "SkillTracker.Profile.Application/SkillTracker.Profile.Application.csproj"
 RUN dotnet restore "SkillTracker.Profile.Data/SkillTracker.Profile.Data.csproj"
@@ -30,7 +28,6 @@ RUN dotnet restore "SkillTracker.Profile.Domain/SkillTracker.Profile.Domain.cspr
 
 COPY SkillTracker.Domain.Core/.				./SkillTracker.Domain.Core/
 COPY SkillTracker.Infrastructure.Bus/.		./SkillTracker.Infrastructure.Bus/
-COPY SkillTracker.Infrastructure.IoC/.		./SkillTracker.Infrastructure.IoC/
 COPY SkillTracker.Profile.Api/.				./SkillTracker.Profile.Api/
 COPY SkillTracker.Profile.Application/.		./SkillTracker.Profile.Application/
 COPY SkillTracker.Profile.Data/.			./SkillTracker.Profile.Data/

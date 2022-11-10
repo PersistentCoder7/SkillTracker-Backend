@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SkillTracker.Profile.Data.DbContext;
 using SkillTracker.Profile.Domain.Events;
 using SkillTracker.Profile.Domain.Interfaces;
@@ -13,24 +14,28 @@ namespace SkillTracker.Profile.Data.Repository
     public  class ProfileRepository: IProfileRepository
     {
         private readonly ProfileDbContext _profileDbContext;
+        private readonly ILogger<ProfileDbContext> _logger;
 
-        public ProfileRepository(ProfileDbContext profileDbContext)
+        public ProfileRepository(ProfileDbContext profileDbContext, ILogger<ProfileDbContext> logger)
         {
-                _profileDbContext = profileDbContext;
+            _profileDbContext = profileDbContext;
+            _logger = logger;
         }
 
         public async Task<Domain.Models.Profile> SaveProfile(Domain.Models.Profile profile)
         {
             if (profile.UpdatedOn != null)
             {
+                
                 _profileDbContext.Entry(profile).State = EntityState.Modified;
             }
             else
             {
                 _profileDbContext.Profiles.Add(profile);
             }
-            
+            _logger.LogInformation($"Save profile in CosmosDB for Associate: {profile.AssociateId}");
             await _profileDbContext.SaveChangesAsync();
+            _logger.LogInformation($"Saved profile in CosmosDB for Associate: {profile.AssociateId}");
             return await Task.FromResult(profile);
         }
 
@@ -51,6 +56,7 @@ namespace SkillTracker.Profile.Data.Repository
 
             if (@event.AssociateId != null)
             {
+                //_logger.LogInformation($"Search profile in CosmosDB for Associate: {AssociateId}");
                 var x=_profileDbContext.Profiles.AsEnumerable()
                     .FirstOrDefault(s => s.AssociateId.ToLower() == @event.AssociateId.ToLower());
                 if (x!=null) result.Add(x);

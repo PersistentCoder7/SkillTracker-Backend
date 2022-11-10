@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SkillTracker.Domain.Core.Bus;
 using SkillTracker.Profile.Domain.Events;
@@ -14,10 +15,12 @@ namespace SkillTracker.Profile.Domain.EventHandlers
     public  class AddedProfileEventHandler: IEventHandler<AddedProfileEvent>
     {
         private readonly IProfileRepository _repository;
+        private readonly ILogger<AddedProfileEventHandler> _logger;
 
-        public AddedProfileEventHandler(IProfileRepository repository)
+        public AddedProfileEventHandler(IProfileRepository repository, ILogger<AddedProfileEventHandler> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
         public Task Handle(AddedProfileEvent @event)
         {
@@ -35,6 +38,7 @@ namespace SkillTracker.Profile.Domain.EventHandlers
                 }
 ;
              _repository.SaveProfile(profile);
+             _logger.LogInformation($"[AddProfileEvent] is processed for Associate: {@event.AssociateId}");
             return Task.CompletedTask;
         }
     }

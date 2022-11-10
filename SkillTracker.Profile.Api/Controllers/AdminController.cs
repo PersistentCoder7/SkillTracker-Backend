@@ -15,9 +15,9 @@ namespace SkillTracker.Profile.Api.Controllers
         private readonly IProfileService _profileService;
 
 
-        private readonly ILogger<ProfileController> _logger;
+        private readonly ILogger<AdminController> _logger;
 
-        public AdminController(IProfileService profileService, ILogger<ProfileController> logger)
+        public AdminController(IProfileService profileService, ILogger<AdminController> logger)
         {
             this._profileService = profileService;
             _logger = logger;
@@ -36,6 +36,7 @@ namespace SkillTracker.Profile.Api.Controllers
         [HttpPost("search", Name = "Search")]
         public async Task<List<Domain.Models.Profile>> Search(SearchProfileDTO searchProfileDto)
         {
+            _logger.LogInformation("Performing the admin search functionality");
             var result= await _profileService.Search(searchProfileDto);
             return result;
         }

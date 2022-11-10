@@ -65,8 +65,11 @@ namespace SkillTracker.Profile.Api.Controllers
             var profile = await _profileService.GetProfile(associateId);
             if (profile==null) return NotFound();
             
+            //If the profile wasn't updated ever
             var currentDate=DateTime.Now;
-            if (currentDate.Subtract(profile.UpdatedOn.Value).Days < 10 ||
+            var updatedDate=(profile.UpdatedOn==null) ? currentDate: profile.UpdatedOn;
+
+            if (currentDate.Subtract(updatedDate.Value).Days < 10 ||
                 currentDate.Subtract(profile.AddedOn.Value).Days < 10)
             {
                 throw new SkillTrackerDomainException("The profile can be updated only after 10 days of adding or updating the profile");

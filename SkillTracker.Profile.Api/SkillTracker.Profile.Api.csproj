@@ -17,7 +17,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SkillTracker.Infrastructure.IoC\SkillTracker.Infrastructure.IoC.csproj" />
+    <ProjectReference Include="..\SkillTracker.Domain.Core\SkillTracker.Domain.Core.csproj" />
+    <ProjectReference Include="..\SkillTracker.Infrastructure.Bus\SkillTracker.Infrastructure.Bus.csproj" />
+    <ProjectReference Include="..\SkillTracker.Profile.Application\SkillTracker.Profile.Application.csproj" />
+    <ProjectReference Include="..\SkillTracker.Profile.Data\SkillTracker.Profile.Data.csproj" />
+    <ProjectReference Include="..\SkillTracker.Profile.Domain\SkillTracker.Profile.Domain.csproj" />
   </ItemGroup>
 
 </Project>

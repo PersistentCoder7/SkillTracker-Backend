@@ -1,73 +1,49 @@
-using System.Configuration;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using SkillTracker.Domain.Core.Bus;
-using SkillTracker.Infrastructure.IoC;
 using SkillTracker.Profile.Api.Extensions;
 using SkillTracker.Profile.Api.Infrastructure.ExceptionHandlers;
 using SkillTracker.Profile.Data.DbContext;
-using SkillTracker.Profile.Domain.EventHandlers;
-using SkillTracker.Profile.Domain.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+//Configure swagger versioning
 builder.AddSwaggerConfiguration();
 
-builder.Services.AddMediatR(typeof(Program));
+//Register all the Commands and events for Microservices
+builder.Services.RegisterMicroServices();
 
-RegisterServices(builder.Services, builder.Configuration);
+//CosmosDB: Configuration
+builder.AddCosmosDb();
 
+//Register global exception handler
 builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
-
 var app = builder.Build();
 
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 //{
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "SkillTracker Microservice V1");
-       
-    });
+app.UseSwagger();
+app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "SkillTracker Microservice V1"); });
 //}
 
+//This is essential to allow CORS policy to work.
+app.UseCors("CorsPolicy");
 app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 app.MapControllers();
 
-SubscribeToEventBus(app);
+//Add the subscribers to listen to events
+app.EnListSubscribeToEventBus();
 
 app.Run();
 
-
-
-void SubscribeToEventBus(WebApplication webApplication)
-{
-    var eventBus = app.Services.GetRequiredService<IEventBus>();
-    eventBus.Subscribe<AddedProfileEvent, AddedProfileEventHandler>();
-    eventBus.Subscribe<UpdatedProfileEvent, UpdatedProfileEventHandler>();
-    //eventBus.Subscribe<SearchProfileEvent, SearchProfileEventHandler>();
-}
-
-
-void RegisterServices(IServiceCollection services,IConfiguration configuration)
-{
-    //CosmosDB: Configuration
-    ConfigureCosmosDb(services, configuration);
-
-    DependencyContainer.RegisterCustomServices(services);
-}
 
 void ConfigureCosmosDb(IServiceCollection services, IConfiguration configuration)
 {
@@ -98,4 +74,3 @@ void ConfigureCosmosDb(IServiceCollection services, IConfiguration configuration
     //    //PopulateData(dbOptions);
     //});
 }
-

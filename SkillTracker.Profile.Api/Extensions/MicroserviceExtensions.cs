@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediatR;
-using Microsoft.Extensions.DependencyInjection;
+﻿using MediatR;
 using SkillTracker.Domain.Core.Bus;
 using SkillTracker.Infrastructure.Bus;
 using SkillTracker.Profile.Application.Interfaces;
@@ -17,12 +11,13 @@ using SkillTracker.Profile.Domain.EventHandlers;
 using SkillTracker.Profile.Domain.Events;
 using SkillTracker.Profile.Domain.Interfaces;
 
-namespace SkillTracker.Infrastructure.IoC
+namespace SkillTracker.Profile.Api.Extensions
 {
-    public static  class DependencyContainer
+    public static class MicroserviceExtensions
     {
-        public static void RegisterCustomServices(this IServiceCollection services)
+        public static void RegisterMicroServices(this IServiceCollection services)
         {
+            services.AddMediatR(typeof(Program));
 
             //Domain Bus
             services.AddSingleton<IEventBus, RabbitMQBus>(sp =>
@@ -30,7 +25,7 @@ namespace SkillTracker.Infrastructure.IoC
                 var scopeFactory = sp.GetRequiredService<IServiceScopeFactory>();
                 return new RabbitMQBus(sp.GetService<IMediator>(), scopeFactory);
             });
-            
+
             //Subscriptions
             services.AddTransient<AddedProfileEventHandler>();
             services.AddTransient<UpdatedProfileEventHandler>();
@@ -53,5 +48,14 @@ namespace SkillTracker.Infrastructure.IoC
             services.AddTransient<IProfileRepository, ProfileRepository>();
             services.AddTransient<ProfileDbContext>();
         }
+
+        public static void EnListSubscribeToEventBus(this WebApplication webApplication)
+        {
+            var eventBus = webApplication.Services.GetRequiredService<IEventBus>();
+            eventBus.Subscribe<AddedProfileEvent, AddedProfileEventHandler>();
+            eventBus.Subscribe<UpdatedProfileEvent, UpdatedProfileEventHandler>();
+            //eventBus.Subscribe<SearchProfileEvent, SearchProfileEventHandler>();
+        }
+
     }
 }
