@@ -36,6 +36,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Containerization", "Contain
 		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTracker.Profile.Cache", "SkillTracker.Profile.Cache\SkillTracker.Profile.Cache.csproj", "{6A9B5D1D-1B74-4F82-844C-973E68C64E0C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -66,6 +68,10 @@ Global
 		{4BBD2BA6-C7DF-471D-9225-34C0ED66321E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4BBD2BA6-C7DF-471D-9225-34C0ED66321E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4BBD2BA6-C7DF-471D-9225-34C0ED66321E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A9B5D1D-1B74-4F82-844C-973E68C64E0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A9B5D1D-1B74-4F82-844C-973E68C64E0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A9B5D1D-1B74-4F82-844C-973E68C64E0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A9B5D1D-1B74-4F82-844C-973E68C64E0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,6 +88,7 @@ Global
 		{201B7EAC-1A39-4A77-904D-70CA8CBA6BA9} = {6620BC0D-D92F-409C-AA20-CEB35B05E408}
 		{6952C1EC-E724-490A-B47B-1A27AA06D0DF} = {C9830FDA-10B1-4255-BDA1-D9292BA8ADF0}
 		{4BBD2BA6-C7DF-471D-9225-34C0ED66321E} = {F1562A19-ABF6-45F4-8272-3F8DF5B9FBE4}
+		{6A9B5D1D-1B74-4F82-844C-973E68C64E0C} = {C9830FDA-10B1-4255-BDA1-D9292BA8ADF0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {536FA907-98BB-4FBD-899D-E682A78375FB}

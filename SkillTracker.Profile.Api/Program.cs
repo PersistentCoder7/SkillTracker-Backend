@@ -32,7 +32,14 @@ app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "SkillTrac
 //}
 
 //This is essential to allow CORS policy to work.
-app.UseCors("CorsPolicy");
+app.UseCors(builder =>
+{
+    builder
+        .SetIsOriginAllowed((host) => true)
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials();
+});
 app.UseHttpsRedirection();
 app.UseAuthorization();
 

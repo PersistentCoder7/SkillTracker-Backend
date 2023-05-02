@@ -10,35 +10,35 @@ namespace SkillTracker.Profile.Application.Helpers
 {
     public static class DTOHelpers
     {
-        public static List<Skill> GetSkills(this List<AddSkillsDTO> skillsDtos, string associateId)
+        public static List<Skill> GetSkills(this List<AddSkillsDTO> skillsDtos, string associateId) 
         {
             var skills = new List<Skill>()
             {
                 new Skill()
                 {
-                    IsTechnical = true, Name = "HTML-CSS-JAVASCRIPT", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 1
+                    IsTechnical = true, Name = "HTML-CSS-Javascript", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 1
                 },
-                new Skill() { IsTechnical = true, Name = "ANGULAR", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 2  },
-                new Skill() { IsTechnical = true, Name = "REACT", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 3 },
+                new Skill() { IsTechnical = true, Name = "Angular", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 2  },
+                new Skill() { IsTechnical = true, Name = "React", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 3 },
                 new Skill()
                 {
                     IsTechnical = true, Name = "Asp.Net Core", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 4
                 },
-                new Skill() { IsTechnical = true, Name = "RESTFUL", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 5 },
+                new Skill() { IsTechnical = true, Name = "Restful", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 5 },
                 new Skill()
                 {
                     IsTechnical = true, Name = "Entity Framework", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 6
                 },
-                new Skill() { IsTechnical = true, Name = "GIT", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 7 },
-                new Skill() { IsTechnical = true, Name = "DOCKER", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 8 },
-                new Skill() { IsTechnical = true, Name = "JENKINS", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 9 },
+                new Skill() { IsTechnical = true, Name = "Git", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 7 },
+                new Skill() { IsTechnical = true, Name = "Docker", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 8 },
+                new Skill() { IsTechnical = true, Name = "Jenkins", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 9 },
                 new Skill() { IsTechnical = true, Name = "Azure", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 10 },
-                new Skill() { IsTechnical = true, Name = "SPOKEN", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 11 },
+                new Skill() { IsTechnical = true, Name = "Spoken", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 11 },
                 new Skill()
                 {
-                    IsTechnical = true, Name = "COMMUNICATION", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 12
+                    IsTechnical = true, Name = "Communication", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 12
                 },
-                new Skill() { IsTechnical = true, Name = "APTITUDE", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 13 }
+                new Skill() { IsTechnical = true, Name = "Aptitude", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 13 }
             };
             skills.ForEach(x =>
             {

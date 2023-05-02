@@ -33,7 +33,15 @@ namespace SkillTracker.Profile.Api.Controllers
             if (profile == null) return NotFound();
             return Ok(profile);
         }
-        
+
+        /// <summary>
+        /// Add a new associate profile.
+        /// </summary>
+        /// <response code="200">The new profile is added successfully</response>
+        /// <response code="201">The new profile is added successfully</response>
+        /// <response code="400">Unable to add the profile due to validation error</response>
+        /// <param name="addProfileDto"></param>
+        /// <returns></returns>
         [HttpPost(Name = "AddProfile")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Created)]
@@ -43,9 +51,18 @@ namespace SkillTracker.Profile.Api.Controllers
             _profileService.AddProfile(addProfileDto);
             return Ok(addProfileDto);
         }
-
+        /// <summary>
+        /// Updates the profile of an Associate.
+        /// </summary>['
+        /// <response code="204">The profile was updated successfully</response>
+        /// <response code="404">The AssociateId is Invalid</response>
+        /// <response code="400">Unable to update the profile due to validation error</response>
+        /// <param name="updateProfileDto"></param>
+        /// <param name="userid"></param>
+        /// <returns></returns>
+        /// <exception cref="SkillTrackerDomainException"></exception>
         [HttpPut(Name = "UpdateProfile")]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        //[ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -77,7 +94,7 @@ namespace SkillTracker.Profile.Api.Controllers
             
             _profileService.UpdateProfile(updateProfileDto);
             
-            return Ok();
+            return NoContent();
         }
     }
 }
