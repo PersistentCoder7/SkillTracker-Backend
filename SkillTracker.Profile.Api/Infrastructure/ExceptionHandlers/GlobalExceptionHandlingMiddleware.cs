@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SkillTracker.Profile.Api.Infrastructure.Exceptions;
 
 namespace SkillTracker.Profile.Api.Infrastructure.ExceptionHandlers
 {
@@ -29,15 +30,8 @@ namespace SkillTracker.Profile.Api.Infrastructure.ExceptionHandlers
 
         private async Task SendResponse(HttpContext context, Exception e)
         {
-            ProblemDetails problem = new()
-            {
-                Status = context.Response.StatusCode,
-                Type = e.GetType().Name,
-                Title = e.GetType().Name,
-                Detail = e.Message
-
-            };
-            string json = JsonConvert.SerializeObject(problem);
+            CustomError customError = new(e.Message,e.Data.ToString(),context.Response.StatusCode);
+            string json = JsonConvert.SerializeObject(customError);
             context.Response.ContentType="application/json";
             await context.Response.WriteAsync(json);
         }

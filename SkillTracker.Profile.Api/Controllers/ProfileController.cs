@@ -1,5 +1,6 @@
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using SkillTracker.Profile.Api.ActionFilters;
 using SkillTracker.Profile.Api.Infrastructure.Exceptions;
 using SkillTracker.Profile.Application.Interfaces;
 using SkillTracker.Profile.Application.Models;
@@ -23,7 +24,10 @@ namespace SkillTracker.Profile.Api.Controllers
             _logger = logger;
         }
 
-        
+        /// <summary>
+        /// Retrieve associate's profile based on the associateID.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(Domain.Models.Profile), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Domain.Models.Profile), (int)HttpStatusCode.NotFound)]
@@ -46,6 +50,7 @@ namespace SkillTracker.Profile.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ValidateDtoAttribute]
         public IActionResult Post([FromBody] AddProfileDTO addProfileDto)
         {
             _profileService.AddProfile(addProfileDto);
@@ -67,6 +72,7 @@ namespace SkillTracker.Profile.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesDefaultResponseType]
+        [ValidateDtoAttribute]
         public async Task<ActionResult<int>> UpdateProfile([FromBody] UpdateProfileDTO updateProfileDto, [FromHeader(Name = "x-userid")] string userid)
         {
             if (string.IsNullOrWhiteSpace(userid))
