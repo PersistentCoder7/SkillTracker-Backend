@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Logging;
 using SkillTracker.Domain.Core.Bus;
 using SkillTracker.Profile.Domain.Events;
 using SkillTracker.Profile.Domain.Interfaces;

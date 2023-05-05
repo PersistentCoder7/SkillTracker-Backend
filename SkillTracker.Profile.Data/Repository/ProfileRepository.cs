@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SkillTracker.Profile.Data.DbContext;
 using SkillTracker.Profile.Domain.Events;
@@ -52,25 +47,28 @@ namespace SkillTracker.Profile.Data.Repository
         public async Task<List<Domain.Models.Profile>> Search(SearchProfileEvent @event)
         {
             var result = new List<Domain.Models.Profile>();
-          
 
-            if (@event.AssociateId != null)
+            var profileList = _profileDbContext.Profiles.AsEnumerable();
+            if (!string.IsNullOrEmpty(@event.AssociateId))
             {
                 //_logger.LogInformation($"Search profile in CosmosDB for Associate: {AssociateId}");
-                var x=_profileDbContext.Profiles.AsEnumerable()
-                    .FirstOrDefault(s => s.AssociateId.ToLower() == @event.AssociateId.ToLower());
+                var x=
+                    profileList.FirstOrDefault(s => s.AssociateId.ToLower() == @event.AssociateId.ToLower());
                 if (x!=null) result.Add(x);
             }
-            else if(@event.Name !=null)
+            else if(!string.IsNullOrEmpty(@event.Name))
             {
-                var y =  _profileDbContext.Profiles.AsEnumerable()
-                    .Where(s => s.Name.ToLower().StartsWith(@event.Name.ToLower())).ToList();
+                var y = profileList
+                    .Where(s => s.Name.ToLower().StartsWith(@event.Name.ToLower()))
+                    .ToList();
                 if (y!=null) result.AddRange(y);
             }
-            else if (@event.Skill != null)
+            else if (!string.IsNullOrEmpty(@event.Skill))
             {
-                var z= _profileDbContext.Profiles.AsEnumerable().Where(c => c.Skills.Any(skill => skill.Name.Equals(@event.Skill, StringComparison.OrdinalIgnoreCase))).ToList();
-                if (z!=null) z.AddRange(z);
+                var z= profileList
+                    .Where(c => c.Skills.Any(skill => skill.Name.Equals(@event.Skill, StringComparison.OrdinalIgnoreCase) && skill.Proficiency >10))
+                    .ToList();
+                if (z!=null) result.AddRange(z);
             }
             
             result.ForEach(x=> x.Skills = x.Skills.OrderByDescending(y=> y.Proficiency).ToList());

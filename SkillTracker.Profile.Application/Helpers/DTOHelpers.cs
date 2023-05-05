@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SkillTracker.Profile.Application.Models;
+﻿using SkillTracker.Profile.Application.Models;
 using SkillTracker.Profile.Domain.Models;
 
 namespace SkillTracker.Profile.Application.Helpers
@@ -33,12 +28,12 @@ namespace SkillTracker.Profile.Application.Helpers
                 new Skill() { IsTechnical = true, Name = "Docker", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 8 },
                 new Skill() { IsTechnical = true, Name = "Jenkins", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 9 },
                 new Skill() { IsTechnical = true, Name = "Azure", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 10 },
-                new Skill() { IsTechnical = true, Name = "Spoken", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 11 },
+                new Skill() { IsTechnical = false, Name = "Spoken", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 11 },
                 new Skill()
                 {
-                    IsTechnical = true, Name = "Communication", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 12
+                    IsTechnical = false, Name = "Communication", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 12
                 },
-                new Skill() { IsTechnical = true, Name = "Aptitude", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 13 }
+                new Skill() { IsTechnical = false, Name = "Aptitude", Proficiency = 0, ProfileAssociateId = associateId,SkillId = 13 }
             };
             skills.ForEach(x =>
             {

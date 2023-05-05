@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SkillTracker.Profile.Domain.Models;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace SkillTracker.Profile.Application.Models
 {
@@ -16,5 +10,8 @@ namespace SkillTracker.Profile.Application.Models
         [Required(ErrorMessage = "Proficiency is required")]
         [Range(0, 20, ErrorMessage = "Invalid Proficiency: Range 1 to 20")]
         public int Proficiency { get; set; }
+
+        public bool IsTechnical { get; set; }
+        public int SkillId { get; set; }
     }
 }

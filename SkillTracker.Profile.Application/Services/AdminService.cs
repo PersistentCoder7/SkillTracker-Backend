@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SkillTracker.Domain.Core.Bus;
-using SkillTracker.Profile.Application.Helpers;
+﻿using SkillTracker.Domain.Core.Bus;
 using SkillTracker.Profile.Application.Interfaces;
 using SkillTracker.Profile.Application.Models;
-using SkillTracker.Profile.Domain.Commands;
 using SkillTracker.Profile.Domain.Events;
 using SkillTracker.Profile.Domain.Interfaces;
 

@@ -1,6 +1,4 @@
 ﻿using System.Text;
-using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -129,8 +127,8 @@ namespace SkillTracker.Infrastructure.Bus
                         if (handler == null) continue;
                         var eventType = _eventTypes.SingleOrDefault(t => t.Name == eventName);
                         var @event = JsonConvert.DeserializeObject(message, eventType);
-                        var conreteType = typeof(IEventHandler<>).MakeGenericType(eventType);
-                        await (Task)conreteType.GetMethod("Handle").Invoke(handler, new object[] { @event });
+                        var concreteType = typeof(IEventHandler<>).MakeGenericType(eventType);
+                        await (Task)concreteType.GetMethod("Handle")?.Invoke(handler, new object[] { @event });
                     }
                 }
             }
