@@ -15,10 +15,10 @@ namespace SkillTracker.Profile.Api.ActionFilters
                     .SelectMany(v => v.Errors)
                     .Select(e => e.ErrorMessage);
                 var errorMessage = string.Join(" ", errors);
-                var customError = new CustomError("Validation failed", errorMessage, (int)HttpStatusCode.BadRequest);
-                context.Result = new BadRequestObjectResult(customError);
+                throw new CustomErrorException(errorMessage, (int)HttpStatusCode.BadRequest);
             }
         }
     }
+
 
 }

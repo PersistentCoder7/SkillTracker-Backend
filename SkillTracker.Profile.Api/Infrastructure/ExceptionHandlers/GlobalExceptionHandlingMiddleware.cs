@@ -1,11 +1,14 @@
-﻿using System.Net;
-using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Net;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SkillTracker.Profile.Api.Infrastructure.Exceptions;
 
 namespace SkillTracker.Profile.Api.Infrastructure.ExceptionHandlers
 {
-    public class GlobalExceptionHandlingMiddleware: IMiddleware
+    public class GlobalExceptionHandlingMiddleware : IMiddleware
     {
         private readonly ILogger<GlobalExceptionHandlingMiddleware> _logger;
 
@@ -20,20 +23,39 @@ namespace SkillTracker.Profile.Api.Infrastructure.ExceptionHandlers
             {
                 await next(context);
             }
-            catch (Exception e)
+            catch (CustomErrorException customError) //Deal with custom errors
+            {
+                _logger.LogError(customError, customError.Message);
+                await WriteToResponseStream(context, customError);
+            }
+            catch (Exception e) //Convert other general errors into Custom exceptions to make it easier for the client.
             {
                 _logger.LogError(e, e.Message);
-                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                await SendResponse(context, e);
+
+                var customErrorAttributes = context.GetEndpoint()?.Metadata?.GetOrderedMetadata<CustomErrorMessageAttribute>();
+                if (customErrorAttributes != null)
+                {
+                    var lastCustomErrorAttribute = customErrorAttributes[customErrorAttributes.Count - 1];
+                    var customError = new CustomErrorException(lastCustomErrorAttribute.ErrorMessage,
+                        lastCustomErrorAttribute.StatusCode);
+
+                    await WriteToResponseStream(context, customError);
+                }
+                else
+                {
+                    var customError = new CustomErrorException("Server:An unexpected error occurred.",
+                        (int)HttpStatusCode.InternalServerError);
+
+                    await WriteToResponseStream(context, customError);
+                }
             }
         }
 
-        private async Task SendResponse(HttpContext context, Exception e)
+        private static async Task WriteToResponseStream(HttpContext context, CustomErrorException customError)
         {
-            CustomError customError = new(e.Message,e.Data.ToString(),context.Response.StatusCode);
-            string json = JsonConvert.SerializeObject(customError);
-            context.Response.ContentType="application/json";
-            await context.Response.WriteAsync(json);
+            context.Response.StatusCode = customError.StatusCode;
+            context.Response.ContentType = "application/json";
+            await context.Response.WriteAsync(JsonConvert.SerializeObject(customError));
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Net;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SkillTracker.Profile.Api.ActionFilters;
 using SkillTracker.Profile.Api.Infrastructure.Exceptions;
@@ -31,10 +32,14 @@ namespace SkillTracker.Profile.Api.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(Domain.Models.Profile), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(Domain.Models.Profile), (int)HttpStatusCode.NotFound)]
+        [CustomErrorMessage("An error occurred while processing your request.")]
         public async Task<ActionResult<Domain.Models.Profile>> GetProfile(string id)
         {
             var profile = await _profileService.GetProfile(id);
-            if (profile == null) return NotFound();
+            if (profile == null)
+            {
+                throw new CustomErrorException("The associate profile is not found.", (int)StatusCodes.Status404NotFound);
+            }
             return Ok(profile);
         }
 
@@ -51,8 +56,14 @@ namespace SkillTracker.Profile.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.Created)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ValidateDtoAttribute]
-        public IActionResult Post([FromBody] AddProfileDTO addProfileDto)
+        [CustomErrorMessage("An error occurred while processing your request.", 500)]
+        public async Task<IActionResult> Post([FromBody] AddProfileDTO addProfileDto)
         {
+            var profile = await _profileService.GetProfile(addProfileDto.AssociateId);
+            if (profile != null)
+            {
+                throw new CustomErrorException("The associate profile already exists.", (int)StatusCodes.Status409Conflict);
+            }
             _profileService.AddProfile(addProfileDto);
             return Ok(addProfileDto);
         }
@@ -73,29 +84,25 @@ namespace SkillTracker.Profile.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesDefaultResponseType]
         [ValidateDtoAttribute]
-        public async Task<ActionResult<int>> UpdateProfile([FromBody] UpdateProfileDTO updateProfileDto, [FromHeader(Name = "x-userid")] string userid)
+        [CustomErrorMessage("An error occurred while processing your request.", 500)]
+        public async Task<ActionResult<int>> UpdateProfile([FromBody] UpdateProfileDTO updateProfileDto)
         {
-            if (string.IsNullOrWhiteSpace(userid))
-            {
-                throw new SkillTrackerDomainException("UserId header is missing");
-                //var errors = new List<ValidationFailure> { new ValidationFailure("", "UserId header missing") };
-                //throw new FluentValidation.ValidationException(errors);
-            }
-            //TODO: Ensure that the UserId is not blank
-            
-            var associateId = userid;
-
+            //Check if the profile exists in the database
+            var associateId = updateProfileDto.AssociateId;
             var profile = await _profileService.GetProfile(associateId);
-            if (profile==null) return NotFound();
+            if (profile==null)
+            {
+                throw new CustomErrorException("The associate profile is not found.", (int)StatusCodes.Status404NotFound);
+            }
             
             //If the profile wasn't updated ever
             var currentDate=DateTime.Now;
-            var updatedDate=(profile.UpdatedOn==null) ? currentDate: profile.UpdatedOn;
+            var updatedDate=profile.UpdatedOn ?? currentDate;
+            
 
-            if (currentDate.Subtract(updatedDate.Value).Days < 10 ||
-                currentDate.Subtract(profile.AddedOn.Value).Days < 10)
+            if (currentDate.Subtract(profile.AddedOn!.Value).Days < 10 || currentDate.Subtract(updatedDate).Days < 10)
             {
-                throw new SkillTrackerDomainException("The profile can be updated only after 10 days of adding or updating the profile");
+                throw new CustomErrorException("The profile can be updated only after 10 days of adding or updating the profile", (int)StatusCodes.Status500InternalServerError);
             }
             
             _profileService.UpdateProfile(updateProfileDto);

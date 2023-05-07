@@ -41,7 +41,7 @@ namespace SkillTracker.Profile.Data.Repository
 
         public async Task<Domain.Models.Profile> GetProfile(string id)
         {
-            return await _profileDbContext.Profiles.FirstOrDefaultAsync(p => p.AssociateId == id);
+            return await _profileDbContext.Profiles.FirstOrDefaultAsync(p => p.AssociateId.ToLower() == id.ToLower());
         }
 
         public async Task<List<Domain.Models.Profile>> Search(SearchProfileEvent @event)

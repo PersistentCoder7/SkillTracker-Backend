@@ -2,6 +2,7 @@ using System.Net;
 
 using Microsoft.AspNetCore.Mvc;
 using SkillTracker.Profile.Api.ActionFilters;
+using SkillTracker.Profile.Api.Infrastructure.Exceptions;
 using SkillTracker.Profile.Application.Interfaces;
 using SkillTracker.Profile.Application.Models;
 
@@ -36,6 +37,7 @@ namespace SkillTracker.Profile.Api.Controllers
 
         [HttpPost("search", Name = "Search")]
         [ValidateDtoAttribute]
+        [CustomErrorMessage("An error occurred while processing your request.",500)]
         public async Task<List<Domain.Models.Profile>> Search(SearchProfileDTO searchProfileDto)
         {
             _logger.LogInformation("Performing the admin search functionality");
