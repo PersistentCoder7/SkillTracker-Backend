@@ -16,6 +16,7 @@ namespace SkillTracker.Infrastructure.Bus
         private readonly Dictionary<string, List<Type>> _handlers;
         private readonly List<Type> _eventTypes;
         private readonly IServiceScopeFactory _serviceScopeFactory;
+        private string HostName { get; set; }
 
         public RabbitMQBus(IMediator mediator, IServiceScopeFactory serviceScopeFactory)
         {
@@ -23,6 +24,7 @@ namespace SkillTracker.Infrastructure.Bus
             _serviceScopeFactory = serviceScopeFactory;
             _handlers = new Dictionary<string, List<Type>>();
             _eventTypes = new List<Type>();
+            HostName= Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? "192.168.0.15";
         }
 
         public Task SendCommand<T>(T command) where T : Command
@@ -32,7 +34,7 @@ namespace SkillTracker.Infrastructure.Bus
 
         public void Publish<T>(T @event) where T : Event
         {
-            var factory = new ConnectionFactory() { HostName = "192.168.0.15", UserName = "guest", Password = "guest", Port = 5672 };
+            var factory = new ConnectionFactory() { HostName =this.HostName, UserName = "guest", Password = "guest", Port = 5672 };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
@@ -80,7 +82,7 @@ namespace SkillTracker.Infrastructure.Bus
         {
             var factory = new ConnectionFactory()
             {
-                HostName = "localhost",
+                HostName =this.HostName,
                 UserName = "guest",
                 Password = "guest",
                 Port = 5672,

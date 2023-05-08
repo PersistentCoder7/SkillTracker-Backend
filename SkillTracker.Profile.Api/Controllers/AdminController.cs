@@ -40,6 +40,7 @@ namespace SkillTracker.Profile.Api.Controllers
         /// <param name="searchProfileDto"></param>
         /// <returns>200</returns>
         [HttpPost("search", Name = "Search")]
+        [ProducesResponseType(typeof(Domain.Models.Profile), (int)HttpStatusCode.OK)]
         [ValidateDtoAttribute]
         [CustomErrorMessage("An error occurred while processing your request.",500)]
         public async Task<List<Domain.Models.Profile>> Search(SearchProfileDTO searchProfileDto)

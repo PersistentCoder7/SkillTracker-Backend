@@ -74,7 +74,6 @@ namespace SkillTracker.Profile.Api.Controllers
         /// <response code="404">The AssociateId is Invalid</response>
         /// <response code="400">Unable to update the profile due to validation error</response>
         /// <param name="updateProfileDto"></param>
-        /// <param name="userid"></param>
         /// <returns></returns>
         /// <exception cref="CustomErrorException"></exception>
         [HttpPut(Name = "UpdateProfile")]
