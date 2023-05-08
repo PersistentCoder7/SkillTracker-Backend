@@ -76,7 +76,7 @@ namespace SkillTracker.Profile.Api.Controllers
         /// <param name="updateProfileDto"></param>
         /// <param name="userid"></param>
         /// <returns></returns>
-        /// <exception cref="SkillTrackerDomainException"></exception>
+        /// <exception cref="CustomErrorException"></exception>
         [HttpPut(Name = "UpdateProfile")]
         //[ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -94,15 +94,17 @@ namespace SkillTracker.Profile.Api.Controllers
             {
                 throw new CustomErrorException("The associate profile is not found.", (int)StatusCodes.Status404NotFound);
             }
-            
-            //If the profile wasn't updated ever
-            var currentDate=DateTime.Now;
-            var updatedDate=profile.UpdatedOn ?? currentDate;
-            
 
-            if (currentDate.Subtract(profile.AddedOn!.Value).Days < 10 || currentDate.Subtract(updatedDate).Days < 10)
+            var currentDate=DateTime.Now;
+
+            //If the profile wasn't updated ever
+            if (profile.UpdatedOn==null && currentDate.Subtract(profile.AddedOn!.Value).Days <= 10)
             {
-                throw new CustomErrorException("The profile can be updated only after 10 days of adding or updating the profile", (int)StatusCodes.Status500InternalServerError);
+                throw new CustomErrorException("The profile can be updated only after 10 days of adding the profile", (int)StatusCodes.Status500InternalServerError);
+            }
+            else if (profile.UpdatedOn != null && currentDate.Subtract(profile.UpdatedOn!.Value).Days <= 10)
+            {
+                throw new CustomErrorException("The profile can be updated only after 10 days of updating the profile", (int)StatusCodes.Status500InternalServerError);
             }
             
             _profileService.UpdateProfile(updateProfileDto);

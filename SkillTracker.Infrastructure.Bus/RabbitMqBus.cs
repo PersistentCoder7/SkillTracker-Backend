@@ -32,7 +32,7 @@ namespace SkillTracker.Infrastructure.Bus
 
         public void Publish<T>(T @event) where T : Event
         {
-            var factory = new ConnectionFactory() { HostName = "localhost", UserName = "guest", Password = "guest", Port = 5672 };
+            var factory = new ConnectionFactory() { HostName = "192.168.0.15", UserName = "guest", Password = "guest", Port = 5672 };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {

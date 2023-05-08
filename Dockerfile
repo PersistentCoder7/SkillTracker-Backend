@@ -13,6 +13,7 @@ COPY SkillTracker.Infrastructure.Bus/SkillTracker.Infrastructure.Bus.csproj Skil
 COPY SkillTracker.Profile.Api/SkillTracker.Profile.Api.csproj SkillTracker.Profile.Api/
 COPY SkillTracker.Profile.Application/SkillTracker.Profile.Application.csproj SkillTracker.Profile.Application/
 COPY SkillTracker.Profile.Data/SkillTracker.Profile.Data.csproj SkillTracker.Profile.Data/
+COPY SkillTracker.Profile.Cache/SkillTracker.Profile.Cache.csproj SkillTracker.Profile.Data/
 COPY SkillTracker.Profile.Domain/SkillTracker.Profile.Domain.csproj SkillTracker.Profile.Domain/
 
 #Restore all the packages

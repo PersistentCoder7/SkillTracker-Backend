@@ -66,18 +66,4 @@ void ConfigureCosmosDb(IServiceCollection services, IConfiguration configuration
     database.CreateContainerIfNotExistsAsync(Container, "/associateId");
     services.AddDbContext<ProfileDbContext>(option => option.UseCosmos(ConnectionString, Database));
 
-    //services.AddDbContext<ProfileDbContext>(options =>
-    //{
-
-
-    //    var dbOptions = options.UseCosmos(configuration["CosmosDB:EndpointUri"],
-    //        @"C2y6yDjf5/R+ob0N8A7Cgv30VRDJIWEHLM+4QDU5DE2nQ9nDuVTqobD4b8mGGyPMbIZnqyMsEcaGQy67XIw/Jw==", "SkillTracker").Options;
-    //    //Action<DbContextOptions> PopulateData = async (dbOptions) =>
-    //    //{
-
-    //    //    await ProfileDbContext.SeedInitalDataSync(dbOptions);
-
-    //    //};
-    //    //PopulateData(dbOptions);
-    //});
 }

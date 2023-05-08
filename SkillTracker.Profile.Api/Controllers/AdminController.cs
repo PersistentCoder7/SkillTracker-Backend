@@ -34,7 +34,11 @@ namespace SkillTracker.Profile.Api.Controllers
             if (profile == null) return NotFound();
             return Ok(profile);
         }
-
+        /// <summary>
+        /// Search associate profile based on AssociateID, Skill and Associate name.
+        /// </summary>
+        /// <param name="searchProfileDto"></param>
+        /// <returns>200</returns>
         [HttpPost("search", Name = "Search")]
         [ValidateDtoAttribute]
         [CustomErrorMessage("An error occurred while processing your request.",500)]

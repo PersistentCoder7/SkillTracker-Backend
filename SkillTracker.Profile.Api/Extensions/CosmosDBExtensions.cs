@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Cosmos;
+﻿using Azure.Core;
+using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
 using SkillTracker.Profile.Data.DbContext;
 
@@ -19,7 +20,19 @@ public static class CosmosDBExtensions
         var Database = configuration["CosmosDB:Database"];
         var Container = configuration["CosmosDB:Container"];
 
-        CosmosClient cosmosClient = new CosmosClient(EndpointUri, Key);
+        CosmosClientOptions cosmosClientOptions = new CosmosClientOptions()
+        {
+            ConnectionMode = ConnectionMode.Gateway,
+            HttpClientFactory = () =>
+            {
+                var httpClientHandler = new HttpClientHandler()
+                {
+                    ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
+                };
+                return new HttpClient(httpClientHandler);
+            }
+        }; //This should be of dev mode only.
+        CosmosClient cosmosClient = new CosmosClient(EndpointUri, Key, cosmosClientOptions);
         services.AddSingleton<CosmosClient>(cosmosClient);
         Database database = cosmosClient.CreateDatabaseIfNotExistsAsync(Database).Result;
         database.CreateContainerIfNotExistsAsync(Container, "/associateId");
