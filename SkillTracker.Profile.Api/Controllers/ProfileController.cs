@@ -1,5 +1,4 @@
 using System.Net;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SkillTracker.Profile.Api.ActionFilters;
 using SkillTracker.Profile.Api.Infrastructure.Exceptions;

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SkillTracker.Profile.Api.Infrastructure.Exceptions
+﻿namespace SkillTracker.Profile.Api.Infrastructure.Exceptions
 {
     public class CustomErrorException : Exception
     {

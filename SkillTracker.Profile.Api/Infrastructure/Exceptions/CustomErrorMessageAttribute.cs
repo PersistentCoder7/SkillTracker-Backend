@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SkillTracker.Profile.Api.Infrastructure.Exceptions
+﻿namespace SkillTracker.Profile.Api.Infrastructure.Exceptions
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class CustomErrorMessageAttribute : Attribute

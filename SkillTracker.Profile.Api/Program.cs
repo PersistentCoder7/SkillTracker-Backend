@@ -1,25 +1,25 @@
-using Microsoft.Azure.Cosmos;
-using Microsoft.EntityFrameworkCore;
 using SkillTracker.Profile.Api.Extensions;
 using SkillTracker.Profile.Api.Infrastructure.ExceptionHandlers;
-using SkillTracker.Profile.Data.DbContext;
 
 var builder = WebApplication.CreateBuilder(args);
+// Add configuration sources. 
+builder.Configuration
+    .AddEnvironmentVariables("ST_") 
+    .AddJsonFile("appsettings.json");
 
-
-// Add services to the container.
+// Register Controllers.
 builder.Services.AddControllers();
 
-//Configure swagger versioning
+//Configure swagger version
 builder.AddSwaggerConfiguration();
 
-//Register all the Commands and events for Microservices
+//Register Micro-services commands and events
 builder.Services.RegisterMicroServices();
 
 //CosmosDB: Configuration
 builder.AddCosmosDb();
 
-//Register global exception handler
+//Register a common global exception handler
 builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
 var app = builder.Build();
 
@@ -42,28 +42,10 @@ app.UseCors(builder =>
 });
 app.UseHttpsRedirection();
 app.UseAuthorization();
-
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 app.MapControllers();
 
 //Add the subscribers to listen to events
 app.EnListSubscribeToEventBus();
-
 app.Run();
 
-
-void ConfigureCosmosDb(IServiceCollection services, IConfiguration configuration)
-{
-    var EndpointUri = configuration["CosmosDB:EndpointUri"];
-    var Key = configuration["CosmosDB:Key"];
-    var ConnectionString = configuration["CosmosDB:ConnectionString"];
-    var Database = configuration["CosmosDB:Database"];
-    var Container = configuration["CosmosDB:Container"];
-
-    CosmosClient cosmosClient = new CosmosClient(EndpointUri, Key);
-    services.AddSingleton<CosmosClient>(cosmosClient);
-    Database database = cosmosClient.CreateDatabaseIfNotExistsAsync(Database).Result;
-    database.CreateContainerIfNotExistsAsync(Container, "/associateId");
-    services.AddDbContext<ProfileDbContext>(option => option.UseCosmos(ConnectionString, Database));
-
-}

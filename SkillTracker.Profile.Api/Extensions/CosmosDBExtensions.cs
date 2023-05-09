@@ -1,56 +1,53 @@
-﻿using Azure.Core;
-using Microsoft.Azure.Cosmos;
+﻿using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
+using SkillTracker.Profile.Api.Utils;
 using SkillTracker.Profile.Data.DbContext;
-using Microsoft.Azure.Documents.Client;
-using Microsoft.Azure.Cosmos.Fluent;
-using Microsoft.Azure.Cosmos.Serialization.HybridRow;
+using System.Net.Http;
+using System.Security.Authentication;
 
-namespace SkillTracker.Profile.Api.Extensions;
-
-public static class CosmosDBExtensions
+namespace SkillTracker.Profile.Api.Extensions
 {
-    public static void AddCosmosDb(this WebApplicationBuilder builder)
+    public static class CosmosDBExtensions
     {
-        var services = builder.Services;
-        var configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
-        var connectionString = configuration["CosmosDB:ConnectionString"];
-        var databaseName = configuration["CosmosDB:Database"];
-        var containerName = configuration["CosmosDB:Container"];
-        var hostName = Environment.GetEnvironmentVariable("COSMOSDB_HOST") ?? "192.168.0.15";
-        connectionString = connectionString.Replace("192.168.0.15", hostName);
-
-        services.AddHttpClient();
-
-        services.AddSingleton<CosmosClient>(sp =>
+        public static void AddCosmosDb(this WebApplicationBuilder builder)
         {
-            CosmosClientOptions cosmosClientOptions = new CosmosClientOptions()
+            var services = builder.Services;
+            var configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
+
+            var hostName = Environment.GetEnvironmentVariable("CosmosDbHost");
+            var connectionString = configuration["CosmosDbConnectionString"].Replace("<host>", hostName);
+
+            // Parse the Cosmos DB connection string using CosmosConnectionStringBuilder.
+            var parser = new STCosmosConnectionStringParser();
+            parser.ParseConnectionString(connectionString);
+
+            // Use the parsed values from the Cosmos DB connection string.
+            var accountEndpoint = parser.AccountEndpoint;
+            var accountKey = parser.AccountKey;
+            var database = parser.Database;
+            var containerName = parser.Container;
+
+            // Create a custom HttpClientHandler that disables SSL verification.
+            var handler = new HttpClientHandler();
+            handler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
+
+            services.AddSingleton<CosmosClient>(sp =>
             {
-                HttpClientFactory = () =>
+                CosmosClientOptions cosmosClientOptions = new CosmosClientOptions()
                 {
-                    HttpMessageHandler httpMessageHandler = new HttpClientHandler()
-                    {
-                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                    };
+                    HttpClientFactory = () => new HttpClient(handler)
+                };
+                return new CosmosClient(connectionString, cosmosClientOptions);
+            });
 
-                    return new HttpClient(httpMessageHandler);
-                },
-                ConnectionMode = ConnectionMode.Gateway
-            };
-
-            return new CosmosClient(connectionString, cosmosClientOptions);
-        });
-
-       
             var cosmosClient = services.BuildServiceProvider().GetRequiredService<CosmosClient>();
-            var database = cosmosClient.CreateDatabaseIfNotExistsAsync(databaseName).GetAwaiter().GetResult();
-            database.Database.CreateContainerIfNotExistsAsync(containerName, "/associateId").GetAwaiter().GetResult();
-        
+            var db = cosmosClient.CreateDatabaseIfNotExistsAsync(database).GetAwaiter().GetResult();
+            db.Database.CreateContainerIfNotExistsAsync(containerName, "/associateId").GetAwaiter().GetResult();
 
-        services.AddDbContext<ProfileDbContext>(options =>
-        {
-            options.UseCosmos(connectionString, databaseName);
-        });
+            services.AddDbContext<ProfileDbContext>(options =>
+            {
+                options.UseCosmos(connectionString, database);
+            });
+        }
     }
-
 }
