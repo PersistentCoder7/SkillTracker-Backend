@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SkillTracker.Profile.Data.DbContext;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Cosmos.Fluent;
+using Microsoft.Azure.Cosmos.Serialization.HybridRow;
 
 namespace SkillTracker.Profile.Api.Extensions;
 
@@ -11,38 +12,45 @@ public static class CosmosDBExtensions
 {
     public static void AddCosmosDb(this WebApplicationBuilder builder)
     {
-
         var services = builder.Services;
-        var configuration = builder.Configuration;
+        var configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
+        var connectionString = configuration["CosmosDB:ConnectionString"];
+        var databaseName = configuration["CosmosDB:Database"];
+        var containerName = configuration["CosmosDB:Container"];
+        var hostName = Environment.GetEnvironmentVariable("COSMOSDB_HOST") ?? "192.168.0.15";
+        connectionString = connectionString.Replace("192.168.0.15", hostName);
+
+        services.AddHttpClient();
+
+        services.AddSingleton<CosmosClient>(sp =>
+        {
+            CosmosClientOptions cosmosClientOptions = new CosmosClientOptions()
+            {
+                HttpClientFactory = () =>
+                {
+                    HttpMessageHandler httpMessageHandler = new HttpClientHandler()
+                    {
+                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+                    };
+
+                    return new HttpClient(httpMessageHandler);
+                },
+                ConnectionMode = ConnectionMode.Gateway
+            };
+
+            return new CosmosClient(connectionString, cosmosClientOptions);
+        });
+
+       
+            var cosmosClient = services.BuildServiceProvider().GetRequiredService<CosmosClient>();
+            var database = cosmosClient.CreateDatabaseIfNotExistsAsync(databaseName).GetAwaiter().GetResult();
+            database.Database.CreateContainerIfNotExistsAsync(containerName, "/associateId").GetAwaiter().GetResult();
         
-        var ConnectionString = configuration["CosmosDB:ConnectionString"];
-        var Database = configuration["CosmosDB:Database"];
-        var Container = configuration["CosmosDB:Container"];
-        var HostName = Environment.GetEnvironmentVariable("COSMOSDB_HOST") ?? "192.168.0.15";
-        ConnectionString = ConnectionString.Replace("192.168.0.15", HostName);
 
-        var httpClientHandler = new HttpClientHandler();
-        httpClientHandler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) =>
+        services.AddDbContext<ProfileDbContext>(options =>
         {
-            // Perform custom validation logic here, e.g. check the certificate thumbprint
-            // against a known value or check that the certificate is issued by a trusted CA
-            // and has not been revoked.
-
-            // If the certificate is valid, return true, otherwise return false.
-            return true;
-        };
-
-        var httpClient = new HttpClient(httpClientHandler);
-        var cosmosClientOptions = new CosmosClientOptions
-        {
-            ConnectionMode = ConnectionMode.Gateway,
-            HttpClientFactory = () => httpClient
-        };
-
-        var cosmosClient = new CosmosClient(ConnectionString, cosmosClientOptions);
-        services.AddSingleton<CosmosClient>(cosmosClient);
-        Database database = cosmosClient.CreateDatabaseIfNotExistsAsync(Database).Result;
-        database.CreateContainerIfNotExistsAsync(Container, "/associateId");
-        services.AddDbContext<ProfileDbContext>(option => option.UseCosmos(ConnectionString, Database));
+            options.UseCosmos(connectionString, databaseName);
+        });
     }
+
 }
