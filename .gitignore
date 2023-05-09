@@ -397,3 +397,5 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 /SkillTracker.Profile.Api/appsettings.Development.json
+/SkillTracker.Profile.Api/appsettings.json
+/SkillTracker.Profile.Api/appsettings.json
