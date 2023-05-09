@@ -6,60 +6,59 @@ using SkillTracker.Profile.Domain.Commands;
 using SkillTracker.Profile.Domain.Events;
 using SkillTracker.Profile.Domain.Interfaces;
 
-namespace SkillTracker.Profile.Application.Services
+namespace SkillTracker.Profile.Application.Services;
+
+public  class ProfileService: IProfileService
 {
-    public  class ProfileService: IProfileService
+    private readonly IProfileRepository _profileRepository;
+    private readonly IEventBus _bus;
+
+    public ProfileService(IProfileRepository profileRepository, IEventBus bus)
     {
-        private readonly IProfileRepository _profileRepository;
-        private readonly IEventBus _bus;
+        _profileRepository = profileRepository;
+        _bus = bus;
+    }
+    public async Task<IEnumerable<Domain.Models.Profile>> GetProfiles()
+    {
+        return await _profileRepository.GetAllProfiles();
+    }
 
-        public ProfileService(IProfileRepository profileRepository, IEventBus bus)
+    public void AddProfile(AddProfileDTO addProfileDto)
+    {
+        //To Add the data from dto to Command
+        var addProfileCommand = new AddProfileCommand()
         {
-            _profileRepository = profileRepository;
-            _bus = bus;
-        }
-        public async Task<IEnumerable<Domain.Models.Profile>> GetProfiles()
-        {
-            return await _profileRepository.GetAllProfiles();
-        }
+            AssociateId = addProfileDto.AssociateId,
+            Email = addProfileDto.Email,
+            Name = addProfileDto.Name,
+            Mobile = addProfileDto.Mobile,
+            Skills = addProfileDto.Skills.GetSkills(associateId:addProfileDto.AssociateId)
+        };
+        _bus.SendCommand(addProfileCommand);
+    }
 
-        public void AddProfile(AddProfileDTO addProfileDto)
-        {
-            //To Add the data from dto to Command
-            var addProfileCommand = new AddProfileCommand()
-            {
-                AssociateId = addProfileDto.AssociateId,
-                Email = addProfileDto.Email,
-                Name = addProfileDto.Name,
-                Mobile = addProfileDto.Mobile,
-                Skills = addProfileDto.Skills.GetSkills(associateId:addProfileDto.AssociateId)
-            };
-            _bus.SendCommand(addProfileCommand);
-        }
+    public async Task<Domain.Models.Profile> GetProfile(string id)
+    {
+        return await _profileRepository.GetProfile(id);
+    }
 
-        public async Task<Domain.Models.Profile> GetProfile(string id)
+    public void UpdateProfile(UpdateProfileDTO updateProfileDto)
+    {
+        var updateProfileCommand = new UpdateProfileCommand()
         {
-           return await _profileRepository.GetProfile(id);
-        }
+            AssociateId = updateProfileDto.AssociateId,
+            Skills = updateProfileDto.Skills.GetSkills(updateProfileDto.AssociateId)
+        };
+        _bus.SendCommand(updateProfileCommand);
+    }
 
-        public void UpdateProfile(UpdateProfileDTO updateProfileDto)
+    public async Task<List<Domain.Models.Profile>> Search(SearchProfileDTO searchProfileDto)
+    {
+        return await _profileRepository.Search(new SearchProfileEvent()
         {
-            var updateProfileCommand = new UpdateProfileCommand()
-            {
-                AssociateId = updateProfileDto.AssociateId,
-                Skills = updateProfileDto.Skills.GetSkills(updateProfileDto.AssociateId)
-            };
-            _bus.SendCommand(updateProfileCommand);
-        }
-
-        public async Task<List<Domain.Models.Profile>> Search(SearchProfileDTO searchProfileDto)
-        {
-            return await _profileRepository.Search(new SearchProfileEvent()
-            {
-                AssociateId = searchProfileDto.AssociateId,
-                Name = searchProfileDto.Name,
-                Skill = searchProfileDto.Skill
-            });
-        }
+            AssociateId = searchProfileDto.AssociateId,
+            Name = searchProfileDto.Name,
+            Skill = searchProfileDto.Skill
+        });
     }
 }

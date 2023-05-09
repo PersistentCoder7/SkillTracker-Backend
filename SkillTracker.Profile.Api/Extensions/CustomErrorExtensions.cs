@@ -1,4 +1,1 @@
-﻿namespace SkillTracker.Profile.Api.Extensions
-{
-
-}
+﻿namespace SkillTracker.Profile.Api.Extensions;

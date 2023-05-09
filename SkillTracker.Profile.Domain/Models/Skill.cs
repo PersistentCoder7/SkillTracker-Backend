@@ -1,21 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace SkillTracker.Profile.Domain.Models;
 
-namespace SkillTracker.Profile.Domain.Models
+public class Skill
 {
-    public class Skill
-    {
-  
-        public string ProfileAssociateId { get; set; }
-        public int SkillId { get; set; }
-        
-        public bool IsTechnical { get; set; }
-
-        [Required(ErrorMessage = "Skill Name is required")]
-        public string Name { get; set; }
-
-        [Required(ErrorMessage = "Proficiency is required")]
-        [Range(1, 20, ErrorMessage = "Invalid Proficiency: Range 1 to 20")]
-        public int Proficiency { get; set; }
-    }
-
+    public string ProfileAssociateId { get; set; }
+    public int SkillId { get; set; }
+    public bool IsTechnical { get; set; }
+    public string Name { get; set; }
+    public int Proficiency { get; set; }
 }

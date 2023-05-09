@@ -1,9 +1,8 @@
 ﻿using SkillTracker.Profile.Domain.Events;
 
-namespace SkillTracker.Profile.Domain.Interfaces
+namespace SkillTracker.Profile.Domain.Interfaces;
+
+public  interface IAdminRepository
 {
-    public  interface IAdminRepository
-    {
-        Task<List<Models.Profile>> Search(SearchProfileEvent @event);
-    }
+    Task<List<Models.Profile>> Search(SearchProfileEvent @event);
 }

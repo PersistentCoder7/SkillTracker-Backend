@@ -1,16 +1,15 @@
 ﻿using SkillTracker.Domain.Core.Commands;
 using SkillTracker.Profile.Domain.Models;
 
-namespace SkillTracker.Profile.Domain.Commands
+namespace SkillTracker.Profile.Domain.Commands;
+
+public  class UpdateProfileCommand:Command
 {
-    public  class UpdateProfileCommand:Command
-    {
-        public string AssociateId { get; set; }
+    public string AssociateId { get; set; }
         
-        public List<Skill> Skills { get; set; }
-        public UpdateProfileCommand()
-        {
+    public List<Skill> Skills { get; set; }
+    public UpdateProfileCommand()
+    {
             
-        }
     }
 }

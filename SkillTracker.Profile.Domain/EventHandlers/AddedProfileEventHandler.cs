@@ -3,37 +3,36 @@ using SkillTracker.Domain.Core.Bus;
 using SkillTracker.Profile.Domain.Events;
 using SkillTracker.Profile.Domain.Interfaces;
 
-namespace SkillTracker.Profile.Domain.EventHandlers
-{
-    public  class AddedProfileEventHandler: IEventHandler<AddedProfileEvent>
-    {
-        private readonly IProfileRepository _repository;
-        private readonly ILogger<AddedProfileEventHandler> _logger;
+namespace SkillTracker.Profile.Domain.EventHandlers;
 
-        public AddedProfileEventHandler(IProfileRepository repository, ILogger<AddedProfileEventHandler> logger)
-        {
-            _repository = repository;
-            _logger = logger;
-        }
-        public Task Handle(AddedProfileEvent @event)
-        {
+public  class AddedProfileEventHandler: IEventHandler<AddedProfileEvent>
+{
+    private readonly IProfileRepository _repository;
+    private readonly ILogger<AddedProfileEventHandler> _logger;
+
+    public AddedProfileEventHandler(IProfileRepository repository, ILogger<AddedProfileEventHandler> logger)
+    {
+        _repository = repository;
+        _logger = logger;
+    }
+    public Task Handle(AddedProfileEvent @event)
+    {
             
-            var profile = new Models.Profile()
-                {
-                    AssociateId = @event.AssociateId,
-                    Email = @event.Email,
-                    Mobile = @event.Mobile,
-                    Name = @event.Name,
-                    Skills = @event.Skills,
-                    AddedOn = @event.AddedOn,
-                    UpdatedOn = @event.UpdatedOn
-                    //UserId = Guid.NewGuid().ToString()
+        var profile = new Models.Profile()
+            {
+                AssociateId = @event.AssociateId,
+                Email = @event.Email,
+                Mobile = @event.Mobile,
+                Name = @event.Name,
+                Skills = @event.Skills,
+                AddedOn = @event.AddedOn,
+                UpdatedOn = @event.UpdatedOn
+                //UserId = Guid.NewGuid().ToString()
                     
-                }
-;
-             _repository.SaveProfile(profile);
-             _logger.LogInformation($"[AddProfileEvent] is processed for Associate: {@event.AssociateId}");
-            return Task.CompletedTask;
-        }
+            }
+            ;
+        _repository.SaveProfile(profile);
+        _logger.LogInformation($"[AddProfileEvent] is processed for Associate: {@event.AssociateId}");
+        return Task.CompletedTask;
     }
 }
