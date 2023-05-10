@@ -1,15 +1,11 @@
 ﻿using MediatR;
-using SkillTracker.Domain.Core.Bus;
-using SkillTracker.Infrastructure.Bus;
+
 using SkillTracker.Profile.Application.Interfaces;
 using SkillTracker.Profile.Application.Services;
+using SkillTracker.Profile.Application.Services.Profile.CommandHandlers;
+using SkillTracker.Profile.Application.Services.Profile.Commands;
 using SkillTracker.Profile.Data.DbContext;
 using SkillTracker.Profile.Data.Repository;
-using SkillTracker.Profile.Domain.CommandHandlers;
-using SkillTracker.Profile.Domain.Commands;
-using SkillTracker.Profile.Domain.EventHandlers;
-using SkillTracker.Profile.Domain.Events;
-using SkillTracker.Profile.Domain.Interfaces;
 
 namespace SkillTracker.Profile.Api.Extensions;
 
@@ -20,20 +16,20 @@ public static class MicroserviceExtensions
         services.AddMediatR(typeof(Program));
 
         //Domain Bus
-        services.AddSingleton<IEventBus, RabbitMQBus>(sp =>
-        {
-            var scopeFactory = sp.GetRequiredService<IServiceScopeFactory>();
-            return new RabbitMQBus(mediator: sp.GetService<IMediator>(), serviceScopeFactory: scopeFactory);
-        });
+        //services.AddSingleton<IEventBus, RabbitMQBus>(sp =>
+        //{
+        //    var scopeFactory = sp.GetRequiredService<IServiceScopeFactory>();
+        //    return new RabbitMQBus(mediator: sp.GetService<IMediator>(), serviceScopeFactory: scopeFactory);
+        //});
 
-        //Subscriptions
-        services.AddTransient<AddedProfileEventHandler>();
-        services.AddTransient<UpdatedProfileEventHandler>();
+        ////Subscriptions
+        //services.AddTransient<AddedProfileEventHandler>();
+        //services.AddTransient<UpdatedProfileEventHandler>();
         //services.AddTransient<SearchProfileEventHandler>();
 
         //Register Events
-        services.AddTransient<IEventHandler<AddedProfileEvent>, AddedProfileEventHandler>();
-        services.AddTransient<IEventHandler<UpdatedProfileEvent>, UpdatedProfileEventHandler>();
+        //services.AddTransient<IEventHandler<AddedProfileEvent>, AddedProfileEventHandler>();
+        //services.AddTransient<IEventHandler<UpdatedProfileEvent>, UpdatedProfileEventHandler>();
         //services.AddTransient<IEventHandler<SearchProfileEvent>, SearchProfileEventHandler>();
 
         //Register Commands 
@@ -42,18 +38,18 @@ public static class MicroserviceExtensions
         //services.AddTransient<IRequestHandler<SearchProfileCommand, bool>, SearchProfileCommandHandler>();
 
         //Application Services
-        services.AddTransient<IProfileService, ProfileService>();
+        //services.AddTransient<IProfileService, ProfileService>();
 
         //DataSource
-        services.AddTransient<IProfileRepository, ProfileRepository>();
-        services.AddTransient<ProfileDbContext>();
+        //services.AddTransient<IProfileRepository, ProfileRepository>();
+        //services.AddTransient<ProfileDbContext>();
     }
 
     public static void EnListSubscribeToEventBus(this WebApplication webApplication)
     {
-        var eventBus = webApplication.Services.GetRequiredService<IEventBus>();
-        eventBus.Subscribe<AddedProfileEvent, AddedProfileEventHandler>();
-        eventBus.Subscribe<UpdatedProfileEvent, UpdatedProfileEventHandler>();
+        //var eventBus = webApplication.Services.GetRequiredService<IEventBus>();
+        //eventBus.Subscribe<AddedProfileEvent, AddedProfileEventHandler>();
+        //eventBus.Subscribe<UpdatedProfileEvent, UpdatedProfileEventHandler>();
         //eventBus.Subscribe<SearchProfileEvent, SearchProfileEventHandler>();
     }
 

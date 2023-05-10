@@ -1,9 +1,11 @@
-using System.Net;
+using Azure.Core;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SkillTracker.Common.Utils.Exceptions;
 using SkillTracker.Profile.Api.ActionFilters;
-using SkillTracker.Profile.Api.Infrastructure.Exceptions;
-using SkillTracker.Profile.Application.Interfaces;
-using SkillTracker.Profile.Application.Models;
+using SkillTracker.Profile.Api.Models;
+using SkillTracker.Profile.Application.Services.Profile.Commands;
+using SkillTracker.Profile.Domain.Models;
 
 namespace SkillTracker.Profile.Api.Controllers;
 
@@ -13,15 +15,11 @@ namespace SkillTracker.Profile.Api.Controllers;
 [ApiController]
 public class ProfileController : ControllerBase
 {
-    private readonly IProfileService _profileService;
+    private readonly IMediator _mediator;
 
-
-    private readonly ILogger<ProfileController> _logger;
-
-    public ProfileController(IProfileService profileService, ILogger<ProfileController> logger)
+    public ProfileController(IMediator mediator)
     {
-        this._profileService = profileService;
-        _logger = logger;
+        _mediator = mediator;
     }
 
     /// <summary>
@@ -29,84 +27,38 @@ public class ProfileController : ControllerBase
     /// </summary>
     /// <returns></returns>
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(Domain.Models.Profile), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(Domain.Models.Profile), (int)HttpStatusCode.NotFound)]
     [CustomErrorMessage("An error occurred while processing your request.")]
     public async Task<ActionResult<Domain.Models.Profile>> GetProfile(string id)
     {
-        var profile = await _profileService.GetProfile(id);
-        if (profile == null)
-        {
-            throw new CustomErrorException("The associate profile is not found.", (int)StatusCodes.Status404NotFound);
-        }
+        Domain.Models.Profile profile = await GetProfileAsync(id);
         return Ok(profile);
     }
 
-    /// <summary>
-    /// Add a new associate profile.
-    /// </summary>
-    /// <response code="200">The new profile is added successfully</response>
-    /// <response code="201">The new profile is added successfully</response>
-    /// <response code="400">Unable to add the profile due to validation error</response>
-    /// <param name="addProfileDto"></param>
-    /// <returns></returns>
+    private async Task<Domain.Models.Profile> GetProfileAsync(string associateId) =>
+        await _mediator.Send(new GetProfileCommand(associateId));
+
     [HttpPost(Name = "AddProfile")]
-    [ProducesResponseType((int)HttpStatusCode.OK)]
-    [ProducesResponseType((int)HttpStatusCode.Created)]
-    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-    [ValidateDtoAttribute]
+    [ValidateDto]
     [CustomErrorMessage("An error occurred while processing your request.", 500)]
-    public async Task<IActionResult> Post([FromBody] AddProfileDTO addProfileDto)
+    public async Task<IActionResult> Post([FromBody] AddProfileRequest request)
     {
-        var profile = await _profileService.GetProfile(addProfileDto.AssociateId);
-        if (profile != null)
-        {
-            throw new CustomErrorException("The associate profile already exists.", (int)StatusCodes.Status409Conflict);
-        }
-        _profileService.AddProfile(addProfileDto);
-        return Ok(addProfileDto);
+        await AddProfileAsync(request: request);
+        return Ok(request);
     }
-    /// <summary>
-    /// Updates the profile of an Associate.
-    /// </summary>['
-    /// <response code="204">The profile was updated successfully</response>
-    /// <response code="404">The AssociateId is Invalid</response>
-    /// <response code="400">Unable to update the profile due to validation error</response>
-    /// <param name="updateProfileDto"></param>
-    /// <returns></returns>
-    /// <exception cref="CustomErrorException"></exception>
+
+    private async Task AddProfileAsync(AddProfileRequest request) =>
+        _mediator.Send(new AddProfileCommand(request.AssociateId,request.Name,request.Email,request.Mobile,null));
+
+
     [HttpPut(Name = "UpdateProfile")]
-    //[ProducesResponseType((int)HttpStatusCode.OK)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-    [ProducesDefaultResponseType]
-    [ValidateDtoAttribute]
+    [ValidateDto]
     [CustomErrorMessage("An error occurred while processing your request.", 500)]
-    public async Task<ActionResult<int>> UpdateProfile([FromBody] UpdateProfileDTO updateProfileDto)
+    public async Task<ActionResult<int>> UpdateProfile([FromBody] UpdateProfileRequest request)
     {
-        //Check if the profile exists in the database
-        var associateId = updateProfileDto.AssociateId;
-        var profile = await _profileService.GetProfile(associateId);
-        if (profile==null)
-        {
-            throw new CustomErrorException("The associate profile is not found.", (int)StatusCodes.Status404NotFound);
-        }
-
-        var currentDate=DateTime.Now;
-
-        //If the profile wasn't updated ever
-        if (profile.UpdatedOn==null && currentDate.Subtract(profile.AddedOn!.Value).Days <= 10)
-        {
-            throw new CustomErrorException("The profile can be updated only after 10 days of adding the profile", (int)StatusCodes.Status500InternalServerError);
-        }
-        else if (profile.UpdatedOn != null && currentDate.Subtract(profile.UpdatedOn!.Value).Days <= 10)
-        {
-            throw new CustomErrorException("The profile can be updated only after 10 days of updating the profile", (int)StatusCodes.Status500InternalServerError);
-        }
-            
-        _profileService.UpdateProfile(updateProfileDto);
-            
+        await UpdateProfileAsync(request: request);
         return NoContent();
     }
+
+    private async Task UpdateProfileAsync(UpdateProfileRequest request) =>
+        _mediator.Send(new UpdateProfileCommand(request.AssociateId, null));
 }

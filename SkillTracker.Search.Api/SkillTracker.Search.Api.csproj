@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="MediatR" Version="11.0.0" />
+		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.0.0" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SkillTracker.Common.Utils\SkillTracker.Common.Utils.csproj" />
+    <ProjectReference Include="..\SkillTracker.Profile.Application\SkillTracker.Profile.Application.csproj" />
+    <ProjectReference Include="..\SkillTracker.Profile.Cache\SkillTracker.Profile.Cache.csproj" />
+    <ProjectReference Include="..\SkillTracker.Search.Application\SkillTracker.Search.Application.csproj" />
+    <ProjectReference Include="..\SkillTracker.Search.Domain\SkillTracker.Search.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

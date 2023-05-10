@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using Newtonsoft.Json;
-using SkillTracker.Profile.Api.Infrastructure.Exceptions;
+using SkillTracker.Common.Utils.Exceptions;
 
 namespace SkillTracker.Profile.Api.Infrastructure.ExceptionHandlers;
 

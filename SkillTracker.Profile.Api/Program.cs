@@ -17,7 +17,7 @@ builder.AddSwaggerConfiguration();
 builder.Services.RegisterMicroServices();
 
 //CosmosDB: Configuration
-builder.AddCosmosDb();
+//builder.AddCosmosDb();
 
 //Register a common global exception handler
 builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();

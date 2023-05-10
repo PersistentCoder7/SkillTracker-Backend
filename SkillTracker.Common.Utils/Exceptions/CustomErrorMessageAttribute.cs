@@ -1,0 +1,14 @@
+﻿namespace SkillTracker.Common.Utils.Exceptions;
+
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+public class CustomErrorMessageAttribute : Attribute
+{
+    public string ErrorMessage { get; set; }
+    public int StatusCode { get; set; }
+
+    public CustomErrorMessageAttribute(string errorMessage, int statusCode = 500)
+    {
+        ErrorMessage = errorMessage;
+        StatusCode = statusCode;
+    }
+}

@@ -2,8 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using SkillTracker.Profile.Api.Utils;
 using SkillTracker.Profile.Data.DbContext;
-using System.Net.Http;
-using System.Security.Authentication;
 
 namespace SkillTracker.Profile.Api.Extensions;
 

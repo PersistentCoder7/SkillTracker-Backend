@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -24,8 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SkillTracker.Domain.Core\SkillTracker.Domain.Core.csproj" />
-    <ProjectReference Include="..\SkillTracker.Infrastructure.Bus\SkillTracker.Infrastructure.Bus.csproj" />
+    <ProjectReference Include="..\SkillTracker.Common.Utils\SkillTracker.Common.Utils.csproj" />
     <ProjectReference Include="..\SkillTracker.Profile.Application\SkillTracker.Profile.Application.csproj" />
     <ProjectReference Include="..\SkillTracker.Profile.Data\SkillTracker.Profile.Data.csproj" />
     <ProjectReference Include="..\SkillTracker.Profile.Domain\SkillTracker.Profile.Domain.csproj" />

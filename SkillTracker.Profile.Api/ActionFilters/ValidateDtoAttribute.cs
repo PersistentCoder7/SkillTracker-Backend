@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
-using SkillTracker.Profile.Api.Infrastructure.Exceptions;
-using System.Net;
+﻿using System.Net;
+using Microsoft.AspNetCore.Mvc.Filters;
+using SkillTracker.Common.Utils.Exceptions;
 
 namespace SkillTracker.Profile.Api.ActionFilters;
 
