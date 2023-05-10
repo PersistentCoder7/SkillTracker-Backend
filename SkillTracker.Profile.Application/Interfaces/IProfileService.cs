@@ -1,11 +1,10 @@
-﻿using SkillTracker.Profile.Application.Services.Profile.Commands;
+﻿using SkillTracker.Profile.Domain.Models;
 
 namespace SkillTracker.Profile.Application.Interfaces;
 
 public interface IProfileService
 {
-    public Task<IEnumerable<Domain.Models.Profile>> GetProfiles();
-    //public void AddProfile(AddProfileDTO addProfileDto);
+    public void AddProfile(Domain.Models.Profile profile);
     public Task<Domain.Models.Profile> GetProfile(string id);
-    public void UpdateProfile(UpdateProfileCommand updateProfileDto);
+    public void UpdateProfile(UpdateProfile profile);
 }

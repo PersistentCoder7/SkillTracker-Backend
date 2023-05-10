@@ -47,7 +47,7 @@ public class ProfileController : ControllerBase
     }
 
     private async Task AddProfileAsync(AddProfileRequest request) =>
-        _mediator.Send(new AddProfileCommand(request.AssociateId,request.Name,request.Email,request.Mobile,null));
+        await _mediator.Send(new AddProfileCommand(request.AssociateId,request.Name,request.Email,request.Mobile,null));
 
 
     [HttpPut(Name = "UpdateProfile")]
@@ -60,5 +60,5 @@ public class ProfileController : ControllerBase
     }
 
     private async Task UpdateProfileAsync(UpdateProfileRequest request) =>
-        _mediator.Send(new UpdateProfileCommand(request.AssociateId, null));
+        await _mediator.Send(new UpdateProfileCommand(request.AssociateId, null));
 }

@@ -3,4 +3,4 @@ using SkillTracker.Profile.Domain.Models;
 
 namespace SkillTracker.Profile.Application.Services.Profile.Commands;
 
-public record UpdateProfileCommand (string AssociateId, List<Skill> Skills) : IRequest<bool>;
+public record UpdateProfileCommand (string AssociateId, List<BasicSkill> Skills) : IRequest<bool>;

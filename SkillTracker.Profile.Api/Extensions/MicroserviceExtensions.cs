@@ -6,6 +6,7 @@ using SkillTracker.Profile.Application.Services.Profile.CommandHandlers;
 using SkillTracker.Profile.Application.Services.Profile.Commands;
 using SkillTracker.Profile.Data.DbContext;
 using SkillTracker.Profile.Data.Repository;
+using SkillTracker.Profile.Infrastructure.Interfaces;
 
 namespace SkillTracker.Profile.Api.Extensions;
 
@@ -22,27 +23,19 @@ public static class MicroserviceExtensions
         //    return new RabbitMQBus(mediator: sp.GetService<IMediator>(), serviceScopeFactory: scopeFactory);
         //});
 
-        ////Subscriptions
-        //services.AddTransient<AddedProfileEventHandler>();
-        //services.AddTransient<UpdatedProfileEventHandler>();
-        //services.AddTransient<SearchProfileEventHandler>();
-
-        //Register Events
-        //services.AddTransient<IEventHandler<AddedProfileEvent>, AddedProfileEventHandler>();
-        //services.AddTransient<IEventHandler<UpdatedProfileEvent>, UpdatedProfileEventHandler>();
-        //services.AddTransient<IEventHandler<SearchProfileEvent>, SearchProfileEventHandler>();
-
+  
+  
         //Register Commands 
         services.AddTransient<IRequestHandler<AddProfileCommand, bool>, AddProfileCommandHandler>();
         services.AddTransient<IRequestHandler<UpdateProfileCommand, bool>, UpdateProfileCommandHandler>();
-        //services.AddTransient<IRequestHandler<SearchProfileCommand, bool>, SearchProfileCommandHandler>();
+        
 
         //Application Services
-        //services.AddTransient<IProfileService, ProfileService>();
+        services.AddTransient<IProfileService, ProfileService>();
 
         //DataSource
-        //services.AddTransient<IProfileRepository, ProfileRepository>();
-        //services.AddTransient<ProfileDbContext>();
+        services.AddTransient<IProfileRepository, ProfileRepository>();
+        services.AddTransient<ProfileDbContext>();
     }
 
     public static void EnListSubscribeToEventBus(this WebApplication webApplication)

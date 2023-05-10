@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using SkillTracker.Profile.Application.Exceptions;
 using SkillTracker.Profile.Application.Interfaces;
 using SkillTracker.Profile.Application.Services.Profile.Commands;
+using SkillTracker.Profile.Domain.Models;
 
 namespace SkillTracker.Profile.Application.Services.Profile.CommandHandlers;
 
@@ -33,7 +34,10 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
         if (profile.UpdatedOn != null && currentDate.Subtract(profile.UpdatedOn!.Value).Days <= 10) 
             throw new CustomValidationException("The profile can be updated only after 10 days of updating the profile");
 
-        _service.UpdateProfile(request);
+        _service.UpdateProfile(MapTo(request));
         return await Task.FromResult(true);
     }
+
+    private UpdateProfile MapTo(UpdateProfileCommand request) => new UpdateProfile()
+        { AssociateId = request.AssociateId, Skills = request.Skills };
 }

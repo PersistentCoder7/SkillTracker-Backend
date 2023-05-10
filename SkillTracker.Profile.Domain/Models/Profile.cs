@@ -10,7 +10,18 @@ public class Profile
     public string Mobile { get; set; }
     public DateTime? AddedOn { get; set; }
     public DateTime? UpdatedOn { get; set; }
-    public List<Skill> Skills { get; set; }
+    public List<BasicSkill> Skills { get; set; }
+}
+
+public class UpdateProfile
+{
+    public string AssociateId { get; set; }
+    public List<BasicSkill> Skills { get; set; }
+}
+public class BasicSkill
+{
+    public int SkillId { get; set; }
+    public int Proficiency { get; set; }
 }
 
 public class Skill
