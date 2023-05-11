@@ -2,15 +2,16 @@
 using SkillTracker.Profile.Domain.Models;
 using SkillTracker.Profile.Infrastructure.Interfaces;
 
-namespace SkillTracker.Profile.Application.Services;
+namespace SkillTracker.Profile.Infrastructure;
 
 public class ProfileService : IProfileService
 {
-    private readonly IProfileRepository _profileRepository;
+    private readonly IProfileRepository _repository;
+
     /*IProfileRepository profileRepository, IEventBus bus*/
-    public ProfileService(IProfileRepository profileRepository)
+    public ProfileService(IProfileRepository repository)
     {
-        _profileRepository = profileRepository;
+        _repository = repository;
     }
     //public async Task<IEnumerable<Domain.Models.Profile>> GetProfiles()
     //{
@@ -18,18 +19,18 @@ public class ProfileService : IProfileService
     //}
 
 
-    public void AddProfile(Domain.Models.Profile profile)
+    public async Task AddProfile(Domain.Models.Profile profile)
     {
-      
+        await _repository.AddProfile(profile);
     }
 
     public async Task<Domain.Models.Profile> GetProfile(string id)
     {
-        return await _profileRepository.GetProfile(id);
+        return await _repository.GetProfile(id);
     }
 
-    public void UpdateProfile(UpdateProfile profile)
+    public async Task UpdateProfile(UpdateProfile profile)
     {
-      
+        await _repository.UpdateProfile(profile);
     }
 }

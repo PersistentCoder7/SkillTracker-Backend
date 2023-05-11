@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using SkillTracker.Profile.Api.Utils;
 using SkillTracker.Profile.Data.DbContext;
+using SkillTracker.Profile.Data.Repository;
+using SkillTracker.Profile.Infrastructure.Interfaces;
 
 namespace SkillTracker.Profile.Api.Extensions;
 

@@ -11,7 +11,7 @@
      
 //    public DateTime? UpdatedOn { get; set; }
 
-//    public List<Skill> Skills { get; set; }
+//    public List<ProfileSkill> Skills { get; set; }
 
 //    public UpdatedProfileEvent()
 //    {

@@ -18,20 +18,17 @@ public class AddProfileCommandHandler : IRequestHandler<AddProfileCommand, bool>
     }
     public async Task<bool> Handle(AddProfileCommand request, CancellationToken cancellationToken)
     {
-        //TODO: (int)StatusCodes.Status409Conflict
         var profile = await _service.GetProfile(request.AssociateId);
         if (profile != null) throw new ProfileAlreadyExistsException("The associate profile already exists.");
-        
-        //_logger.LogInformation($"Publishing  [AddedProfileEvent] for Associate: {request.AssociateId}");
-        //_bus.Publish(new AddedProfileEvent()
-        //{
-        //    Name = request.Name,
-        //    Email = request.Email,
-        //    AssociateId = request.AssociateId,
-        //    Skills = request.Skills,
-        //    Mobile = request.Mobile
-        //});
-
+        _service.AddProfile(new Domain.Models.Profile()
+        {
+            AddedOn = DateTime.Now,
+            AssociateId = request.AssociateId,
+            Email = request.Email,
+            Mobile = request.Mobile,
+            Name = request.Name,
+            Skills = request.Skills
+        });
         return await Task.FromResult(true);
     }
 }

@@ -47,8 +47,13 @@ public class ProfileController : ControllerBase
     }
 
     private async Task AddProfileAsync(AddProfileRequest request) =>
-        await _mediator.Send(new AddProfileCommand(request.AssociateId,request.Name,request.Email,request.Mobile,null));
-
+        await _mediator.Send(new AddProfileCommand(request.AssociateId,
+            request.Name,
+            request.Email,
+            request.Mobile,
+            Skills:request.Skills.
+                Select(x=> new SkillProficiency(){SkillId = x.SkillId, Proficiency = x.Proficiency}).ToList())
+        );
 
     [HttpPut(Name = "UpdateProfile")]
     [ValidateDto]
@@ -60,5 +65,8 @@ public class ProfileController : ControllerBase
     }
 
     private async Task UpdateProfileAsync(UpdateProfileRequest request) =>
-        await _mediator.Send(new UpdateProfileCommand(request.AssociateId, null));
+        await _mediator.Send(new UpdateProfileCommand(request.AssociateId, 
+            Skills: request.Skills.
+            Select(x => new SkillProficiency() { SkillId = x.SkillId, Proficiency = x.Proficiency }).ToList())
+        );
 }

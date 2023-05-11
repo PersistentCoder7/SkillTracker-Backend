@@ -1,11 +1,11 @@
 ﻿using MediatR;
 
 using SkillTracker.Profile.Application.Interfaces;
-using SkillTracker.Profile.Application.Services;
 using SkillTracker.Profile.Application.Services.Profile.CommandHandlers;
 using SkillTracker.Profile.Application.Services.Profile.Commands;
 using SkillTracker.Profile.Data.DbContext;
 using SkillTracker.Profile.Data.Repository;
+using SkillTracker.Profile.Infrastructure;
 using SkillTracker.Profile.Infrastructure.Interfaces;
 
 namespace SkillTracker.Profile.Api.Extensions;
@@ -28,14 +28,14 @@ public static class MicroserviceExtensions
         //Register Commands 
         services.AddTransient<IRequestHandler<AddProfileCommand, bool>, AddProfileCommandHandler>();
         services.AddTransient<IRequestHandler<UpdateProfileCommand, bool>, UpdateProfileCommandHandler>();
-        
 
-        //Application Services
+
+        //The scope is per request
+        services.AddScoped<ProfileDbContext>();
+        //Every time new instances will be made available to the application.
+        services.AddScoped<IProfileRepository, ProfileRepository>();
         services.AddTransient<IProfileService, ProfileService>();
 
-        //DataSource
-        services.AddTransient<IProfileRepository, ProfileRepository>();
-        services.AddTransient<ProfileDbContext>();
     }
 
     public static void EnListSubscribeToEventBus(this WebApplication webApplication)

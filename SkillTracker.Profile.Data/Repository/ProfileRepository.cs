@@ -16,22 +16,24 @@ public  class ProfileRepository: IProfileRepository
         _logger = logger;
     }
 
-    public async Task<Domain.Models.Profile> SaveProfile(Domain.Models.Profile profile)
+    public async Task<Domain.Models.Profile> AddProfile(Domain.Models.Profile profile)
     {
-        if (profile.UpdatedOn != null)
-        {
-                
-            _profileDbContext.Entry(profile).State = EntityState.Modified;
-        }
-        else
-        {
-            _profileDbContext.Profiles.Add(profile);
-        }
+        _profileDbContext.Profiles.Add(profile);
         _logger.LogInformation($"Save profile in CosmosDB for Associate: {profile.AssociateId}");
-        await _profileDbContext.SaveChangesAsync();
-        _logger.LogInformation($"Saved profile in CosmosDB for Associate: {profile.AssociateId}");
+            await _profileDbContext.SaveChangesAsync();
         return await Task.FromResult(profile);
     }
+
+    public async Task<Domain.Models.Profile> UpdateProfile(Domain.Models.UpdateProfile profile)
+    {
+        var dbProfile = await GetProfile(profile.AssociateId);
+        _profileDbContext.Entry(dbProfile).State = EntityState.Modified;
+       
+        await _profileDbContext.SaveChangesAsync();
+        _logger.LogInformation($"Updated profile in CosmosDB for Associate: {profile.AssociateId}");
+        return await Task.FromResult(dbProfile);
+    }
+
     //Will be used for refreshing the cache.
     public async Task<IEnumerable<Domain.Models.Profile>> GetAllProfiles()
     {
