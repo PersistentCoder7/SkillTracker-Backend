@@ -14,7 +14,7 @@ builder.Services.AddControllers();
 builder.AddSwaggerConfiguration();
 
 //Register Micro-services commands and events
-builder.Services.RegisterMicroServices();
+builder.Services.RegisterMediatRCommandHandlers();
 
 //CosmosDB: Configuration
 builder.AddCosmosDb();
@@ -45,7 +45,6 @@ app.UseAuthorization();
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 app.MapControllers();
 
-//Add the subscribers to listen to events
-app.EnListSubscribeToEventBus();
+
 app.Run();
 

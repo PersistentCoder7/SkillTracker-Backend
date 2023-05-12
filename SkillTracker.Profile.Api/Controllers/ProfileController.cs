@@ -1,4 +1,3 @@
-using Azure.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SkillTracker.Common.Utils.Exceptions;

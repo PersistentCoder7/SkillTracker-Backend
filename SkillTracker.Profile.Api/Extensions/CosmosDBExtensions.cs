@@ -1,8 +1,10 @@
 ﻿using Microsoft.Azure.Cosmos;
 using Microsoft.EntityFrameworkCore;
 using SkillTracker.Profile.Api.Utils;
+using SkillTracker.Profile.Application.Interfaces;
 using SkillTracker.Profile.Data.DbContext;
 using SkillTracker.Profile.Data.Repository;
+using SkillTracker.Profile.Infrastructure;
 using SkillTracker.Profile.Infrastructure.Interfaces;
 
 namespace SkillTracker.Profile.Api.Extensions;
@@ -48,5 +50,12 @@ public static class CosmosDBExtensions
         {
             options.UseCosmos(connectionString, database);
         });
+
+        //The scope is per request
+        services.AddScoped<ProfileDbContext>();
+        //Every time new instances will be made available to the application.
+        services.AddScoped<IProfileRepository, ProfileRepository>();
+        services.AddScoped<IProfileService, ProfileService>();
+
     }
 }

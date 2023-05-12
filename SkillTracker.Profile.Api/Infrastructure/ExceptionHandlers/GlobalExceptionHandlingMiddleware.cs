@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Net;
-using System.Runtime.InteropServices.ComTypes;
+﻿using System.Net;
 using Newtonsoft.Json;
 using SkillTracker.Common.Utils.Exceptions;
 using SkillTracker.Profile.Application.Exceptions;
