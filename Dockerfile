@@ -8,8 +8,8 @@ WORKDIR /src
 
 #Copy the solution files
 COPY *.sln .
-COPY SkillTracker.Domain.Core/SkillTracker.Domain.Core.csproj SkillTracker.Domain.Core/
-COPY SkillTracker.Infrastructure.Bus/SkillTracker.Infrastructure.Bus.csproj SkillTracker.Infrastructure.Bus/
+COPY SkillTracker.Common.Utils/SkillTracker.Common.Utils.csproj SkillTracker.Common.Utils/
+COPY SkillTracker.Profile.Infrastructure/SkillTracker.Profile.Infrastructure.csproj SkillTracker.Profile.Infrastructure/
 COPY SkillTracker.Profile.Api/SkillTracker.Profile.Api.csproj SkillTracker.Profile.Api/
 COPY SkillTracker.Profile.Application/SkillTracker.Profile.Application.csproj SkillTracker.Profile.Application/
 COPY SkillTracker.Profile.Data/SkillTracker.Profile.Data.csproj SkillTracker.Profile.Data/
@@ -18,8 +18,8 @@ COPY SkillTracker.Profile.Domain/SkillTracker.Profile.Domain.csproj SkillTracker
 
 #Restore all the packages
 
-RUN dotnet restore "SkillTracker.Domain.Core/SkillTracker.Domain.Core.csproj"
-RUN dotnet restore "SkillTracker.Infrastructure.Bus/SkillTracker.Infrastructure.Bus.csproj"
+RUN dotnet restore "SkillTracker.Common.Utils/SkillTracker.Common.Utils.csproj"
+RUN dotnet restore "SkillTracker.Profile.Infrastructure/SkillTracker.Profile.Infrastructure.csproj"
 RUN dotnet restore "SkillTracker.Profile.Api/SkillTracker.Profile.Api.csproj"
 RUN dotnet restore "SkillTracker.Profile.Application/SkillTracker.Profile.Application.csproj"
 RUN dotnet restore "SkillTracker.Profile.Data/SkillTracker.Profile.Data.csproj"
@@ -27,12 +27,12 @@ RUN dotnet restore "SkillTracker.Profile.Domain/SkillTracker.Profile.Domain.cspr
 
 #Copy the other files under each project
 
-COPY SkillTracker.Domain.Core/.				./SkillTracker.Domain.Core/
-COPY SkillTracker.Infrastructure.Bus/.		./SkillTracker.Infrastructure.Bus/
-COPY SkillTracker.Profile.Api/.				./SkillTracker.Profile.Api/
-COPY SkillTracker.Profile.Application/.		./SkillTracker.Profile.Application/
-COPY SkillTracker.Profile.Data/.			./SkillTracker.Profile.Data/
-COPY SkillTracker.Profile.Domain/.			./SkillTracker.Profile.Domain/
+COPY SkillTracker.Common.Utils/.				./SkillTracker.Common.Utils/
+COPY SkillTracker.Profile.Infrastructure/.		./SkillTracker.Profile.Infrastructure/
+COPY SkillTracker.Profile.Api/.					./SkillTracker.Profile.Api/
+COPY SkillTracker.Profile.Application/.			./SkillTracker.Profile.Application/
+COPY SkillTracker.Profile.Data/.				./SkillTracker.Profile.Data/
+COPY SkillTracker.Profile.Domain/.				./SkillTracker.Profile.Domain/
 
 #WORKDIR /app/Experiment
 #RUN dotnet publish -c Release -o out

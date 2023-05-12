@@ -1,11 +1,19 @@
+using MassTransit;
 using SkillTracker.Profile.Api.Extensions;
 using SkillTracker.Profile.Api.Infrastructure.ExceptionHandlers;
+using SkillTracker.Profile.Api.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add configuration sources. 
 builder.Configuration
     .AddEnvironmentVariables("ST_") 
     .AddJsonFile("appsettings.json");
+
+builder.Services.AddLogging(builder =>
+{
+    builder.AddConsole();
+    // Add other logging providers as needed
+});
 
 // Register Controllers.
 builder.Services.AddControllers();
@@ -21,6 +29,10 @@ builder.AddCosmosDb();
 
 //Register a common global exception handler
 builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
+
+//Add masstransit to allow messaging
+builder.AddRabbitMQ();
+
 var app = builder.Build();
 
 

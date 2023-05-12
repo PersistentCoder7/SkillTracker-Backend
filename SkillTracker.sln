@@ -36,13 +36,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{DEF369
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkillTracker.Common.Utils", "SkillTracker.Common.Utils\SkillTracker.Common.Utils.csproj", "{C652275C-BBBF-499A-AD64-0A47D9D818D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTracker.Search.Application", "SkillTracker.Search.Application\SkillTracker.Search.Application.csproj", "{6387D711-6F72-44E7-B7B3-E5E13EA93951}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkillTracker.Search.Application", "SkillTracker.Search.Application\SkillTracker.Search.Application.csproj", "{6387D711-6F72-44E7-B7B3-E5E13EA93951}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTracker.Search.Domain", "SkillTracker.Search.Domain\SkillTracker.Search.Domain.csproj", "{3E5A4C3B-84CC-406B-8F0E-44AD5E43D099}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkillTracker.Search.Domain", "SkillTracker.Search.Domain\SkillTracker.Search.Domain.csproj", "{3E5A4C3B-84CC-406B-8F0E-44AD5E43D099}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{B7042826-1F8B-4C2F-BE29-0D7D14E04582}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTracker.Profile.Infrastructure", "SkillTracker.Profile.Infrastructure\SkillTracker.Profile.Infrastructure.csproj", "{F97F2BEB-2F88-481F-BA51-6C4B58190C81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SkillTracker.Profile.Infrastructure", "SkillTracker.Profile.Infrastructure\SkillTracker.Profile.Infrastructure.csproj", "{F97F2BEB-2F88-481F-BA51-6C4B58190C81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkillTracker.Common.MessageContracts", "SkillTracker.Common.MessageContracts\SkillTracker.Common.MessageContracts.csproj", "{E9BF969C-B836-44E6-B51F-FAFCF7B57C82}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -90,6 +92,10 @@ Global
 		{F97F2BEB-2F88-481F-BA51-6C4B58190C81}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F97F2BEB-2F88-481F-BA51-6C4B58190C81}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F97F2BEB-2F88-481F-BA51-6C4B58190C81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9BF969C-B836-44E6-B51F-FAFCF7B57C82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9BF969C-B836-44E6-B51F-FAFCF7B57C82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9BF969C-B836-44E6-B51F-FAFCF7B57C82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9BF969C-B836-44E6-B51F-FAFCF7B57C82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -112,6 +118,7 @@ Global
 		{3E5A4C3B-84CC-406B-8F0E-44AD5E43D099} = {F1562A19-ABF6-45F4-8272-3F8DF5B9FBE4}
 		{B7042826-1F8B-4C2F-BE29-0D7D14E04582} = {F3E9CCC9-23D2-4A42-BCDB-516542C53898}
 		{F97F2BEB-2F88-481F-BA51-6C4B58190C81} = {B7042826-1F8B-4C2F-BE29-0D7D14E04582}
+		{E9BF969C-B836-44E6-B51F-FAFCF7B57C82} = {DEF369DE-602C-4402-A9DE-013EC2468CBF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {536FA907-98BB-4FBD-899D-E682A78375FB}

@@ -16,9 +16,11 @@
 	</ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.15" />
     <PackageReference Include="MediatR" Version="11.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
@@ -28,6 +30,7 @@
     <ProjectReference Include="..\SkillTracker.Profile.Application\SkillTracker.Profile.Application.csproj" />
     <ProjectReference Include="..\SkillTracker.Profile.Data\SkillTracker.Profile.Data.csproj" />
     <ProjectReference Include="..\SkillTracker.Profile.Domain\SkillTracker.Profile.Domain.csproj" />
+    <ProjectReference Include="..\SkillTracker.Profile.Infrastructure\SkillTracker.Profile.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
