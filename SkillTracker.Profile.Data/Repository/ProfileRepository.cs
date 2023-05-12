@@ -27,7 +27,19 @@ public  class ProfileRepository: IProfileRepository
     public async Task<Domain.Models.Profile> UpdateProfile(Domain.Models.UpdateProfile profile)
     {
         var dbProfile = await GetProfile(profile.AssociateId);
-        _profileDbContext.Entry(dbProfile).State = EntityState.Modified;
+        dbProfile.UpdatedOn = profile.UpdatedOn;
+        dbProfile.Skills = profile.Skills;
+        try
+        {
+            _profileDbContext.Profiles.Update(dbProfile);
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+      
+        
        
         await _profileDbContext.SaveChangesAsync();
         _logger.LogInformation($"Updated profile in CosmosDB for Associate: {profile.AssociateId}");

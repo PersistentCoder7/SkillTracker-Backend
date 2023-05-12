@@ -16,6 +16,7 @@ public class Profile
 public class UpdateProfile
 {
     public string AssociateId { get; set; }
+    public DateTime? UpdatedOn { get; set; }
     public List<SkillProficiency> Skills { get; set; }
 }
 public class SkillProficiency

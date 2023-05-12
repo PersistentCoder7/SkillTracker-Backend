@@ -34,10 +34,10 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
         if (profile.UpdatedOn != null && currentDate.Subtract(profile.UpdatedOn!.Value).Days <= 10) 
             throw new CustomValidationException("The profile can be updated only after 10 days of updating the profile");
 
-        _service.UpdateProfile(MapTo(request));
+        await _service.UpdateProfile(MapTo(request));
         return await Task.FromResult(true);
     }
 
     private UpdateProfile MapTo(UpdateProfileCommand request) => new UpdateProfile()
-        { AssociateId = request.AssociateId, Skills = request.Skills };
+        { AssociateId = request.AssociateId, Skills = request.Skills,UpdatedOn = DateTime.Now};
 }

@@ -20,7 +20,7 @@ public class AddProfileCommandHandler : IRequestHandler<AddProfileCommand, bool>
     {
         var profile = await _service.GetProfile(request.AssociateId);
         if (profile != null) throw new ProfileAlreadyExistsException("The associate profile already exists.");
-        _service.AddProfile(new Domain.Models.Profile()
+        await _service.AddProfile(new Domain.Models.Profile()
         {
             AddedOn = DateTime.Now,
             AssociateId = request.AssociateId,

@@ -9,6 +9,6 @@ public class Skills
     public int Proficiency { get; set; }
 
     [Required(ErrorMessage = "SkillId is required")]
-    [Range(1, 12, ErrorMessage = "Invalid SkillId: Range 1 to 13")]
+    [Range(1, 13, ErrorMessage = "Invalid SkillId: Range 1 to 13")]
     public int SkillId { get; set; }
 }

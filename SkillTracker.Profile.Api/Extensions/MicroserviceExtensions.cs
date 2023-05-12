@@ -26,15 +26,15 @@ public static class MicroserviceExtensions
   
   
         //Register Commands 
-        services.AddTransient<IRequestHandler<AddProfileCommand, bool>, AddProfileCommandHandler>();
-        services.AddTransient<IRequestHandler<UpdateProfileCommand, bool>, UpdateProfileCommandHandler>();
-
+        services.AddScoped<IRequestHandler<AddProfileCommand, bool>, AddProfileCommandHandler>();
+        services.AddScoped<IRequestHandler<UpdateProfileCommand, bool>, UpdateProfileCommandHandler>();
+        services.AddScoped<IRequestHandler<GetProfileCommand, Domain.Models.Profile>, GetProfileCommandHandler>();
 
         //The scope is per request
         services.AddScoped<ProfileDbContext>();
         //Every time new instances will be made available to the application.
         services.AddScoped<IProfileRepository, ProfileRepository>();
-        services.AddTransient<IProfileService, ProfileService>();
+        services.AddScoped<IProfileService, ProfileService>();
 
     }
 
