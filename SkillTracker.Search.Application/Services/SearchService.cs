@@ -35,15 +35,16 @@ public class SearchService : ISearchService
                 .ToList();
             if (y != null) result.AddRange(y);
         }
-        else if (!string.IsNullOrEmpty(searchCriteria.Skill))
+        else if (searchCriteria.SkillId>0)
         {
-            //var z = cachedProfiles
-            //    .Where(c => c.Skills.Any(skill => skill.SkillId == searchCriteria.Skill) && skill.Proficiency > 10))
-            //    .ToList();
-            //if (z != null) result.AddRange(z);
+            var z = cachedProfiles
+                .Where(c => c.Skills.Any(skill => skill.SkillId == searchCriteria.SkillId && skill.Proficiency > 10))
+                .ToList();
+            if (z != null) result.AddRange(z);
         }
 
         result.ForEach(x => x.Skills = x.Skills.OrderByDescending(y => y.Proficiency).ToList());
         return await Task.FromResult(result);
+
     }
 }

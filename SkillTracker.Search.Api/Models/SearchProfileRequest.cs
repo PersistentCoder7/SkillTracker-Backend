@@ -1,4 +1,4 @@
 ﻿namespace SkillTracker.Search.Api.Models
 {
-    public record SearchProfileRequest(string AssociateId, string Name, string Skill);
+    public record SearchProfileRequest(string AssociateId, string Name, int SkillId);
 }

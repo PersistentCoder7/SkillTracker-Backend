@@ -1,5 +1,6 @@
 
 using SkillTracker.Profile.Application.Interfaces;
+using SkillTracker.Profile.Application.Services;
 using SkillTracker.Search.Api.Extensions;
 using SkillTracker.Search.Api.Infrastructure.ExceptionHandlers;
 using SkillTracker.Search.Application.Interfaces;

@@ -39,5 +39,5 @@ public class SearchController : ControllerBase
     }
     
     private async Task<List<CachedProfile>> SearchProfileAsync(SearchProfileRequest request) =>
-       await _mediator.Send(new SearchProfileCommand(new SearchCriteria(request.AssociateId, request.Name, request.Skill)));
+       await _mediator.Send(new SearchProfileCommand(new SearchCriteria(request.AssociateId, request.Name, request.SkillId)));
 }

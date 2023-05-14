@@ -8,6 +8,6 @@ namespace SkillTracker.Search.Domain.Models
 {
     namespace SkillTracker.Search.Api.Models
     {
-        public record SearchCriteria(string AssociateId, string Name, string Skill);
+        public record SearchCriteria(string AssociateId, string Name, int SkillId);
     }
 }
