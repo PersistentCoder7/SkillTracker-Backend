@@ -1,4 +1,5 @@
 ﻿using MassTransit;
+using Microsoft.Extensions.Logging;
 using SkillTracker.Common.MessageContracts.Messages;
 using SkillTracker.Profile.Infrastructure.Interfaces;
 using SkillProficiency = SkillTracker.Profile.Domain.Models.SkillProficiency;
@@ -8,9 +9,12 @@ namespace SkillTracker.Profile.Infrastructure.Consumers
     public class UpdateProfileConsumer:IConsumer<UpdateProfileMessage>
     {
         private readonly IProfileRepository _repository;
-        public UpdateProfileConsumer(IProfileRepository repository)
+        private readonly IBus _bus;
+
+        public UpdateProfileConsumer(IProfileRepository repository,IBus bus)
         {
             _repository = repository;
+            _bus = bus;
         }
         public async Task Consume(ConsumeContext<UpdateProfileMessage> context)
         {
@@ -25,6 +29,8 @@ namespace SkillTracker.Profile.Infrastructure.Consumers
                         Proficiency = x.Proficiency
                     }).ToList()
             });
+
+            await _bus.Publish<RefreshCacheEvent>(new RefreshCacheEvent());
         }
     }
 }

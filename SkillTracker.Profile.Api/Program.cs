@@ -27,6 +27,9 @@ builder.Services.RegisterMediatRCommandHandlers();
 //CosmosDB: Configuration
 builder.AddCosmosDb();
 
+//Redis Cache
+builder.AddRedisCache();
+
 //Register a common global exception handler
 builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
 

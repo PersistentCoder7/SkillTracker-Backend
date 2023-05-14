@@ -9,21 +9,18 @@ namespace SkillTracker.Search.Domain.Models
 {
     public class CachedProfile
     {
-        [Key] public string AssociateId { get; set; }
+        public string AssociateId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string Mobile { get; set; }
         public DateTime? AddedOn { get; set; }
         public DateTime? UpdatedOn { get; set; }
-        public List<Skill> Skills { get; set; }
+        public List<CachedSkillProficiency> Skills { get; set; }
     }
 
-    public class Skill
+    public class CachedSkillProficiency
     {
-        public string ProfileAssociateId { get; set; }
         public int SkillId { get; set; }
-        public bool IsTechnical { get; set; }
-        public string Name { get; set; }
         public int Proficiency { get; set; }
     }
 }

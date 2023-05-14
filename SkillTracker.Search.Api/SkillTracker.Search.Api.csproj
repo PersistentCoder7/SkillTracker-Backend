@@ -12,14 +12,22 @@
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.0.0" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.15.1" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.5" />
 	</ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SkillTracker.Common.Utils\SkillTracker.Common.Utils.csproj" />
     <ProjectReference Include="..\SkillTracker.Profile.Application\SkillTracker.Profile.Application.csproj" />
-    <ProjectReference Include="..\SkillTracker.Profile.Cache\SkillTracker.Profile.Cache.csproj" />
     <ProjectReference Include="..\SkillTracker.Search.Application\SkillTracker.Search.Application.csproj" />
     <ProjectReference Include="..\SkillTracker.Search.Domain\SkillTracker.Search.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

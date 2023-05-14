@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SkillTracker.Common.MessageContracts\SkillTracker.Common.MessageContracts.csproj" />
     <ProjectReference Include="..\SkillTracker.Profile.Application\SkillTracker.Profile.Application.csproj" />
+    <ProjectReference Include="..\SkillTracker.Search.Cache\SkillTracker.Search.Cache.csproj" />
   </ItemGroup>
 
 </Project>

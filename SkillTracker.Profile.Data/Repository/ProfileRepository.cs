@@ -56,4 +56,9 @@ public  class ProfileRepository: IProfileRepository
     {
         return await _profileDbContext.Profiles.FirstOrDefaultAsync(p => p.AssociateId.ToLower() == id.ToLower());
     }
+
+    public async Task<List<Domain.Models.Profile>> GetProfiles()
+    {
+        return await _profileDbContext.Profiles.ToListAsync();
+    }
 }

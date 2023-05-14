@@ -30,12 +30,12 @@ public class SearchController : ControllerBase
     [HttpPost("search", Name = "Search")]
     [ValidateDto]
     [CustomErrorMessage("An error occurred while processing your search request.",500)]
-    public async Task<List<SearchProfileResponse>> Search([FromBody]SearchProfileRequest request)
+    public async Task<List<CachedProfile>> Search([FromBody]SearchProfileRequest request)
     {
         var response = await SearchProfileAsync(request);
        
         
-        return new List<SearchProfileResponse>();
+        return await Task.FromResult(response);
     }
     
     private async Task<List<CachedProfile>> SearchProfileAsync(SearchProfileRequest request) =>

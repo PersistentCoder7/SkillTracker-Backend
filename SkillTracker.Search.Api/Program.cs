@@ -1,4 +1,11 @@
+
+using SkillTracker.Profile.Application.Interfaces;
+using SkillTracker.Search.Api.Extensions;
 using SkillTracker.Search.Api.Infrastructure.ExceptionHandlers;
+using SkillTracker.Search.Application.Interfaces;
+using SkillTracker.Search.Application.Services;
+using SkillTracker.Search.Cache;
+using SkillTracker.Search.Cache.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add configuration sources. 
@@ -6,20 +13,31 @@ builder.Configuration
     .AddEnvironmentVariables("ST_")
     .AddJsonFile("appsettings.json");
 
+builder.Services.AddLogging(builder =>
+{
+    builder.AddConsole();
+    // Add other logging providers as needed
+});
+
 // Register Controllers.
 builder.Services.AddControllers();
 
-////Configure swagger version
-//builder.AddSwaggerConfiguration();
+//Configure swagger version
+builder.AddSwaggerConfiguration();
 
-////Register Micro-services commands and events
-//builder.Services.RegisterMicroServices();
+builder.Services.AddScoped<ISearchService,SearchService >();
+builder.Services.AddScoped<ICacheRepository, CacheRepository>();
 
-////CosmosDB: Configuration
-//builder.AddCosmosDb();
+//Register Micro-services commands and events
+builder.Services.RegisterMediatRCommandHandlers();
+
+
+//Redis Cache
+builder.AddRedisCache();
 
 //Register a common global exception handler
 builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
+
 var app = builder.Build();
 
 
@@ -44,5 +62,5 @@ app.UseAuthorization();
 app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
 app.MapControllers();
 
-app.Run();
 
+app.Run();

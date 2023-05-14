@@ -8,9 +8,11 @@ namespace SkillTracker.Profile.Infrastructure.Consumers
     public class AddProfileConsumer:IConsumer<AddProfileMessage>
     {
         private readonly IProfileRepository _repository;
-        public AddProfileConsumer(IProfileRepository repository)
+        private readonly IBus _bus;
+        public AddProfileConsumer(IProfileRepository repository,IBus bus)
         {
             _repository = repository;
+            _bus = bus;
         }
         public async Task Consume(ConsumeContext<AddProfileMessage> context)
         {
@@ -29,6 +31,7 @@ namespace SkillTracker.Profile.Infrastructure.Consumers
                         Proficiency = x.Proficiency
                     }).ToList()
             });
+            await _bus.Publish<RefreshCacheEvent>(new RefreshCacheEvent());
         }
     }
 }

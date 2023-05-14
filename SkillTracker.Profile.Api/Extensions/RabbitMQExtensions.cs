@@ -28,6 +28,10 @@ namespace SkillTracker.Profile.Api.Extensions
                 {
                     
                 });
+                x.AddConsumer<RefreshCacheEventConsumer>(x =>
+                {
+
+                });
                 x.UsingRabbitMq((context, cfg) =>
                 {
                     cfg.Host(rabbitConfig.Host,"/",px =>

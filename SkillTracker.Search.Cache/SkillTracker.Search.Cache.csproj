@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="11.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="StackExchange.Redis.Extensions.Core" Version="9.1.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SkillTracker.Search.Cache\SkillTracker.Search.Cache.csproj" />
     <ProjectReference Include="..\SkillTracker.Search.Domain\SkillTracker.Search.Domain.csproj" />
   </ItemGroup>
 
