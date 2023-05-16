@@ -11,13 +11,14 @@ namespace SkillTracker.Profile.Api.Extensions;
 
 public static class CosmosDBExtensions
 {
-    public static void AddCosmosDb(this WebApplicationBuilder builder)
+    public static void AddCosmosDb(this WebApplicationBuilder builder, ILogger<Program> logger)
     {
         var services = builder.Services;
         var configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
 
-        var hostName = Environment.GetEnvironmentVariable("CosmosDbHost");
-        var connectionString = configuration["CosmosDbConnectionString"].Replace("<host>", hostName);
+       
+        var connectionString = configuration["CosmosDbConnectionString"];
+        logger.LogInformation($"CosmosDB Connectionstring: {connectionString}");
 
         // Parse the Cosmos DB connection string using CosmosConnectionStringBuilder.
         var parser = new STCosmosConnectionStringParser();

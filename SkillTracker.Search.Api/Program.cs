@@ -26,7 +26,7 @@ builder.Services.AddControllers();
 //Configure swagger version
 builder.AddSwaggerConfiguration();
 
-builder.Services.AddScoped<ISearchService,SearchService >();
+builder.Services.AddScoped<ISearchService,SearchService>();
 builder.Services.AddScoped<ICacheRepository, CacheRepository>();
 
 //Register Micro-services commands and events

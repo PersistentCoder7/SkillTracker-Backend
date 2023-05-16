@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SkillTracker.Profile.Data.DbContext;
+using SkillTracker.Profile.Domain.Models;
 using SkillTracker.Profile.Infrastructure.Interfaces;
 
 namespace SkillTracker.Profile.Data.Repository;
@@ -18,6 +19,15 @@ public  class ProfileRepository: IProfileRepository
 
     public async Task<Domain.Models.Profile> AddProfile(Domain.Models.Profile profile)
     {
+        foreach (var mSkillId in Enumerable.Range(1,13))
+        {
+            var s=profile.Skills.Find(x => x.SkillId == mSkillId);
+            if (s == null)
+            {
+                profile.Skills.Add(new SkillProficiency(){SkillId = mSkillId, Proficiency = 0});
+            }
+
+        }
         _profileDbContext.Profiles.Add(profile);
         _logger.LogInformation($"Save profile in CosmosDB for Associate: {profile.AssociateId}");
             await _profileDbContext.SaveChangesAsync();

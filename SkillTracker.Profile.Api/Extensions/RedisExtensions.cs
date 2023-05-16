@@ -9,14 +9,14 @@ namespace SkillTracker.Profile.Api.Extensions
 {
     public static class RedisExtensions
     {
-        public static void AddRedisCache(this  WebApplicationBuilder builder)
+        public static void AddRedisCache(this WebApplicationBuilder builder, ILogger<Program> logger)
         {
             var services = builder.Services;
             var configuration = services.BuildServiceProvider().GetRequiredService<IConfiguration>();
 
-            var hostName = Environment.GetEnvironmentVariable("CacheServiceHost");
-            var connectionString = configuration["CacheServiceConnectionString"].Replace("<host>", hostName);
+            var connectionString = configuration["CacheServiceConnectionString"];
 
+            logger.LogInformation($"Redis Connectionstring: {connectionString}");
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = connectionString;

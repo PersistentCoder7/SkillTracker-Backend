@@ -1,65 +1,66 @@
 using MassTransit;
+using Microsoft.Extensions.DependencyInjection;
 using SkillTracker.Profile.Api.Extensions;
 using SkillTracker.Profile.Api.Infrastructure.ExceptionHandlers;
 using SkillTracker.Profile.Api.Utils;
 
-var builder = WebApplication.CreateBuilder(args);
-// Add configuration sources. 
-builder.Configuration
-    .AddEnvironmentVariables("ST_") 
-    .AddJsonFile("appsettings.json");
-
-builder.Services.AddLogging(builder =>
+public class Program
 {
-    builder.AddConsole();
-    // Add other logging providers as needed
-});
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
 
-// Register Controllers.
-builder.Services.AddControllers();
+        // Add configuration sources.
+        builder.TweakConfiguration();
 
-//Configure swagger version
-builder.AddSwaggerConfiguration();
+        // Logging Initialization
+        builder.Logging.AddConsole();
+        var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
 
-//Register Micro-services commands and events
-builder.Services.RegisterMediatRCommandHandlers();
+        // Register Controllers.
+        builder.Services.AddControllers();
 
-//CosmosDB: Configuration
-builder.AddCosmosDb();
+        // Configure swagger version
+        builder.AddSwaggerConfiguration();
 
-//Redis Cache
-builder.AddRedisCache();
+        // Register Micro-services commands and events
+        builder.Services.RegisterMediatRCommandHandlers(logger);
 
-//Register a common global exception handler
-builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
+        // CosmosDB: Configuration
+        builder.AddCosmosDb(logger);
 
-//Add masstransit to allow messaging
-builder.AddRabbitMQ();
+        // Redis Cache
+        builder.AddRedisCache(logger);
 
-var app = builder.Build();
+        // Register a common global exception handler
+        builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
 
+        // Add masstransit to allow messaging
+        builder.AddRabbitMQ(logger);
 
-// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-app.UseSwagger();
-app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "SkillTracker Microservice V1"); });
-//}
+        var app = builder.Build();
 
-//This is essential to allow CORS policy to work.
-app.UseCors(builder =>
-{
-    builder
-        .SetIsOriginAllowed((host) => true)
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials();
-});
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
-app.MapControllers();
+        // Configure the HTTP request pipeline.
+        // if (app.Environment.IsDevelopment())
+        // {
+        app.UseSwagger();
+        app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "SkillTracker Microservice V1"); });
+        // }
 
+        // This is essential to allow CORS policy to work.
+        app.UseCors(builder =>
+        {
+            builder
+                .SetIsOriginAllowed((host) => true)
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
+        });
+        app.UseHttpsRedirection();
+        app.UseAuthorization();
+        app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+        app.MapControllers();
 
-app.Run();
-
+        app.Run();
+    }
+}
