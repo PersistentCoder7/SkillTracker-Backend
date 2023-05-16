@@ -1,6 +1,3 @@
-
-using SkillTracker.Profile.Application.Interfaces;
-using SkillTracker.Profile.Application.Services;
 using SkillTracker.Search.Api.Extensions;
 using SkillTracker.Search.Api.Infrastructure.ExceptionHandlers;
 using SkillTracker.Search.Application.Interfaces;
@@ -8,60 +5,61 @@ using SkillTracker.Search.Application.Services;
 using SkillTracker.Search.Cache;
 using SkillTracker.Search.Cache.Interfaces;
 
-var builder = WebApplication.CreateBuilder(args);
-// Add configuration sources. 
-builder.Configuration
-    .AddEnvironmentVariables("ST_")
-    .AddJsonFile("appsettings.json");
-
-builder.Services.AddLogging(builder =>
+public class Program
 {
-    builder.AddConsole();
-    // Add other logging providers as needed
-});
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
 
-// Register Controllers.
-builder.Services.AddControllers();
+        // Add configuration sources.
+        builder.TweakConfiguration();
 
-//Configure swagger version
-builder.AddSwaggerConfiguration();
+        // Logging Initialization
+        builder.Logging.AddConsole();
+        var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
 
-builder.Services.AddScoped<ISearchService,SearchService>();
-builder.Services.AddScoped<ICacheRepository, CacheRepository>();
+        // Register Controllers.
+        builder.Services.AddControllers();
 
-//Register Micro-services commands and events
-builder.Services.RegisterMediatRCommandHandlers();
+        //Configure swagger version
+        builder.AddSwaggerConfiguration();
 
+        builder.Services.AddScoped<ISearchService, SearchService>();
+        builder.Services.AddScoped<ICacheRepository, CacheRepository>();
 
-//Redis Cache
-builder.AddRedisCache();
+        //Register Micro-services commands and events
+        builder.Services.RegisterMediatRCommandHandlers();
 
-//Register a common global exception handler
-builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
+        // Redis Cache
+        builder.AddRedisCache(logger);
 
-var app = builder.Build();
+        //Register a common global exception handler
+        builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
 
-
-// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-app.UseSwagger();
-app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "SkillTracker Microservice V1"); });
-//}
-
-//This is essential to allow CORS policy to work.
-app.UseCors(builder =>
-{
-    builder
-        .SetIsOriginAllowed((host) => true)
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials();
-});
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
-app.MapControllers();
+        var app = builder.Build();
 
 
-app.Run();
+        // Configure the HTTP request pipeline.
+        //if (app.Environment.IsDevelopment())
+        //{
+        app.UseSwagger();
+        app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "SkillTracker Search Microservice V1"); });
+        //}
+
+        //This is essential to allow CORS policy to work.
+        app.UseCors(builder =>
+        {
+            builder
+                .SetIsOriginAllowed((host) => true)
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
+        });
+        app.UseHttpsRedirection();
+        app.UseAuthorization();
+        app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
+        app.MapControllers();
+
+        app.Run();
+    }
+}

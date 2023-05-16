@@ -27,6 +27,11 @@ public class SearchController : ControllerBase
         _logger = logger;
     }
 
+    /// <summary>
+    /// Search the cached profiles based on SkillId, Associate name or Associate ID 
+    /// </summary>
+    /// <param name="request"></param>
+    /// <returns>Returns the list of profiles matching the search criteria</returns>
     [HttpPost("search", Name = "Search")]
     [ValidateDto]
     [CustomErrorMessage("An error occurred while processing your search request.",500)]

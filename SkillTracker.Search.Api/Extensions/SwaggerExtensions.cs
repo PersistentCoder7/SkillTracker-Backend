@@ -28,12 +28,12 @@ public static class SwaggerExtensions
         //Add swagger documentation.
         builder.Services.AddSwaggerGen(c =>
         {
-            c.SwaggerDoc("v1", new OpenApiInfo() { Title = "Profile Service", Version = "V1" });
+            c.SwaggerDoc("v1", new OpenApiInfo() { Title = "Search Service", Version = "V1" });
 
             //Xml documentation
-            //var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-            //c.IncludeXmlComments(xmlPath);
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            c.IncludeXmlComments(xmlPath);
         });
     }
 

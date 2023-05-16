@@ -36,6 +36,10 @@ public class ProfileController : ControllerBase
     private async Task<Domain.Models.Profile> GetProfileAsync(string associateId) =>
         await _mediator.Send(new GetProfileCommand(associateId));
 
+    /// <summary>
+    /// Add associates profile.
+    /// </summary>
+    /// <returns></returns>
     [HttpPost(Name = "AddProfile")]
     [ValidateDto]
     [CustomErrorMessage("An error occurred while processing your request.", 500)]
@@ -54,6 +58,10 @@ public class ProfileController : ControllerBase
                 Select(x=> new SkillProficiency(){SkillId = x.SkillId, Proficiency = x.Proficiency}).ToList())
         );
 
+    /// <summary>
+    /// Update the associate's profile. Only skills can be updated.
+    /// </summary>
+    /// <returns></returns>
     [HttpPut(Name = "UpdateProfile")]
     [ValidateDto]
     [CustomErrorMessage("An error occurred while processing your request.", 500)]

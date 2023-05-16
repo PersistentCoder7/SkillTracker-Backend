@@ -44,7 +44,7 @@ public class Program
         // if (app.Environment.IsDevelopment())
         // {
         app.UseSwagger();
-        app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "SkillTracker Microservice V1"); });
+        app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "SkillTracker Profile Microservice V1"); });
         // }
 
         // This is essential to allow CORS policy to work.
