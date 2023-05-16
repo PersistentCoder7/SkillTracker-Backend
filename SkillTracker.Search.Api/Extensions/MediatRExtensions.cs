@@ -1,6 +1,4 @@
 ﻿using MediatR;
-using SkillTracker.Profile.Application.Services.Profile.CommandHandlers;
-using SkillTracker.Profile.Application.Services.Profile.Commands;
 using SkillTracker.Search.Application.Services.Search.CommandHandlers;
 using SkillTracker.Search.Application.Services.Search.Commands;
 using SkillTracker.Search.Domain.Models;

@@ -1,0 +1,42 @@
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+WORKDIR /src
+
+#Copy the solution files
+COPY *.sln .
+COPY SkillTracker.Search.Api/SkillTracker.Search.Api.csproj SkillTracker.Search.Api/
+COPY SkillTracker.Search.Application/SkillTracker.Search.Application.csproj SkillTracker.Search.Application/
+COPY SkillTracker.Search.Domain/SkillTracker.Search.Domain.csproj SkillTracker.Search.Domain/
+COPY SkillTracker.Search.Cache/SkillTracker.Search.Cache.csproj SkillTracker.Search.Cache/
+COPY SkillTracker.Common.Utils/SkillTracker.Common.Utils.csproj SkillTracker.Common.Utils/
+
+#Restore all the packages
+
+RUN dotnet restore "SkillTracker.Search.Api/SkillTracker.Search.Api.csproj"
+RUN dotnet restore "SkillTracker.Search.Application/SkillTracker.Search.Application.csproj"
+RUN dotnet restore "SkillTracker.Search.Domain/SkillTracker.Search.Domain.csproj"
+RUN dotnet restore "SkillTracker.Search.Cache/SkillTracker.Search.Cache.csproj"
+RUN dotnet restore "SkillTracker.Common.Utils/SkillTracker.Common.Utils.csproj"
+
+#Copy the other files under each project
+
+COPY SkillTracker.Search.Api/.					    ./SkillTracker.Search.Api/.
+COPY SkillTracker.Search.Application/.			./SkillTracker.Search.Application/.
+COPY SkillTracker.Search.Domain/.				    ./SkillTracker.Search.Domain/.
+COPY SkillTracker.Search.Cache/.				    ./SkillTracker.Search.Cache/.
+COPY SkillTracker.Common.Utils/.				      ./SkillTracker.Common.Utils/.
+
+#WORKDIR /app/Experiment
+#RUN dotnet publish -c Release -o out
+
+FROM build AS publish
+RUN dotnet publish "SkillTracker.Search.Api/SkillTracker.Search.Api.csproj" -c Local -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "SkillTracker.Search.Api.dll"]

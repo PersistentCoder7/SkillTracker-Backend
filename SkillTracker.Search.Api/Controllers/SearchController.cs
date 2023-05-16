@@ -2,8 +2,6 @@ using System.Net;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SkillTracker.Common.Utils.Exceptions;
-using SkillTracker.Profile.Application.Interfaces;
-using SkillTracker.Profile.Application.Services.Profile.Commands;
 using SkillTracker.Search.Api.ActionFilters;
 using SkillTracker.Search.Api.Models;
 using SkillTracker.Search.Application.Services.Search.Commands;

@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SkillTracker.Common.Utils\SkillTracker.Common.Utils.csproj" />
-    <ProjectReference Include="..\SkillTracker.Profile.Application\SkillTracker.Profile.Application.csproj" />
     <ProjectReference Include="..\SkillTracker.Search.Application\SkillTracker.Search.Application.csproj" />
     <ProjectReference Include="..\SkillTracker.Search.Domain\SkillTracker.Search.Domain.csproj" />
   </ItemGroup>

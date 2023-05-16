@@ -18,9 +18,6 @@ COPY SkillTracker.Search.Domain/SkillTracker.Search.Domain.csproj SkillTracker.S
 COPY SkillTracker.Profile.Domain/SkillTracker.Profile.Domain.csproj SkillTracker.Profile.Domain/
 COPY SkillTracker.Common.MessageContracts/SkillTracker.Common.MessageContracts.csproj SkillTracker.Common.MessageContracts/
 
-
-
-
 #Restore all the packages
 
 RUN dotnet restore "SkillTracker.Common.Utils/SkillTracker.Common.Utils.csproj"
@@ -49,7 +46,7 @@ COPY SkillTracker.Search.Domain/.				./SkillTracker.Search.Domain/.
 #RUN dotnet publish -c Release -o out
 
 FROM build AS publish
-RUN dotnet publish "SkillTracker.Profile.Api/SkillTracker.Profile.Api.csproj" -c Debug -o /app/publish
+RUN dotnet publish "SkillTracker.Profile.Api/SkillTracker.Profile.Api.csproj" -c Local -o /app/publish
 
 FROM base AS final
 WORKDIR /app
