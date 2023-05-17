@@ -18,26 +18,24 @@ public class Program
         builder.Logging.AddConsole();
         var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
 
+        //Register a common global exception handler
+        builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
+
         // Register Controllers.
         builder.Services.AddControllers();
 
         //Configure swagger version
         builder.AddSwaggerConfiguration();
 
-        builder.Services.AddScoped<ISearchService, SearchService>();
-        builder.Services.AddScoped<ICacheRepository, CacheRepository>();
-
-        //Register Micro-services commands and events
-        builder.Services.RegisterMediatRCommandHandlers();
 
         // Redis Cache
         builder.AddRedisCache(logger);
 
-        //Register a common global exception handler
-        builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
+        //Register Micro-services commands and events
+        builder.Services.RegisterMediatRCommandHandlers(logger);
+
 
         var app = builder.Build();
-
 
         // Configure the HTTP request pipeline.
         //if (app.Environment.IsDevelopment())

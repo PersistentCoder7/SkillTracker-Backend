@@ -17,11 +17,9 @@ namespace SkillTracker.Search.Api.Extensions
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = connectionString;
-                options.ConfigurationOptions.ConnectTimeout = 10000;
-
             });
-            
-            services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(connectionString));
+
+
             services.AddTransient<ICacheRepository, CacheRepository>();
         }
 

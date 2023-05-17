@@ -1,17 +1,20 @@
 ﻿using MediatR;
-using SkillTracker.Search.Application.Services.Search.CommandHandlers;
-using SkillTracker.Search.Application.Services.Search.Commands;
+using SkillTracker.Search.Application.Interfaces;
+using SkillTracker.Search.Application.Services;
+using SkillTracker.Search.Cache.Interfaces;
+using SkillTracker.Search.Cache;
 using SkillTracker.Search.Domain.Models;
 
 namespace SkillTracker.Search.Api.Extensions;
 
 public static class MediatRExtensions
 {
-    public static void RegisterMediatRCommandHandlers(this IServiceCollection services)
+    public static void RegisterMediatRCommandHandlers(this IServiceCollection services,ILogger<Program> logger)
     {
-        services.AddMediatR(typeof(Program));
+        logger.LogInformation("Registering Service,Cache, SearchProfileCommand with MediatR");
+        services.AddScoped<ISearchService, SearchService>();
+        services.AddScoped<ICacheRepository, CacheRepository>();
 
-        //Register Commands 
-        services.AddScoped<IRequestHandler<SearchProfileCommand, List<CachedProfile>>, SearchProfileCommandHandler>();
+        services.AddMediatR(typeof(Program));
     }
 }

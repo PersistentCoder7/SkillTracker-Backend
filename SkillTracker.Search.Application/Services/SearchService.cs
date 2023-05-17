@@ -1,4 +1,5 @@
-﻿using SkillTracker.Search.Application.Interfaces;
+﻿using Microsoft.Extensions.Logging;
+using SkillTracker.Search.Application.Interfaces;
 using SkillTracker.Search.Cache.Interfaces;
 using SkillTracker.Search.Domain.Models;
 using SkillTracker.Search.Domain.Models.SkillTracker.Search.Api.Models;
@@ -8,10 +9,13 @@ namespace SkillTracker.Search.Application.Services;
 public class SearchService : ISearchService
 {
     private readonly ICacheRepository _repository;
+    private readonly ILogger<SearchService> _logger;
 
-    public SearchService(ICacheRepository repository)
+    public SearchService(ICacheRepository repository, ILogger<SearchService> logger)
     {
         _repository = repository;
+        _logger = logger;
+        _logger.LogInformation("Created an instance of SearchService");
     }
 
     public async Task<List<CachedProfile>> Search(SearchCriteria searchCriteria)

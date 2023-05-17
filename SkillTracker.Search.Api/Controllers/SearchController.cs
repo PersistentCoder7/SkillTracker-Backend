@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SkillTracker.Common.Utils.Exceptions;
 using SkillTracker.Search.Api.ActionFilters;
 using SkillTracker.Search.Api.Models;
-using SkillTracker.Search.Application.Services.Search.Commands;
+using SkillTracker.Search.Application.Interfaces;
 using SkillTracker.Search.Domain.Models;
 using SkillTracker.Search.Domain.Models.SkillTracker.Search.Api.Models;
 
@@ -16,13 +16,14 @@ namespace SkillTracker.Search.Api.Controllers;
 [Produces("application/json")]
 public class SearchController : ControllerBase
 {
-    private readonly IMediator _mediator;
     private readonly ILogger<SearchController> _logger;
+    private readonly ISearchService _service;
 
-    public SearchController(IMediator mediator, ILogger<SearchController> logger)
+    public SearchController(ISearchService service, ILogger<SearchController> logger)
     {
-        _mediator = mediator;
+        
         _logger = logger;
+        _service = service;
     }
 
     /// <summary>
@@ -35,12 +36,10 @@ public class SearchController : ControllerBase
     [CustomErrorMessage("An error occurred while processing your search request.",500)]
     public async Task<List<CachedProfile>> Search([FromBody]SearchProfileRequest request)
     {
-        var response = await SearchProfileAsync(request);
-       
-        
+        //var response = await SearchProfileAsync(request);
+        var response = await _service.Search(new SearchCriteria(request.AssociateId, request.Name, request.SkillId));
+
+
         return await Task.FromResult(response);
     }
-    
-    private async Task<List<CachedProfile>> SearchProfileAsync(SearchProfileRequest request) =>
-       await _mediator.Send(new SearchProfileCommand(new SearchCriteria(request.AssociateId, request.Name, request.SkillId)));
 }

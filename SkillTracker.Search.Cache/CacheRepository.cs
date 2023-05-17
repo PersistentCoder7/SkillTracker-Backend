@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SkillTracker.Search.Cache.Interfaces;
@@ -14,23 +15,24 @@ namespace SkillTracker.Search.Cache
 {
     public class CacheRepository:ICacheRepository
     {
-        private readonly IConnectionMultiplexer _redis;
+        private readonly IDistributedCache _redis;
         private readonly ILogger<CacheRepository> _logger;
 
         private string redisKey = "cached_profiles";
 
-        public CacheRepository(IConnectionMultiplexer redis,ILogger<CacheRepository> logger)
+        public CacheRepository(IDistributedCache redis,ILogger<CacheRepository> logger)
         {
             _redis = redis;
             _logger = logger;
+            _logger.LogInformation("Created an instance of CacheRepository");
         }
         public async Task<List<CachedProfile>> Read()
         {
             _logger.LogInformation("Redis:Cache Read");
             var result = new List<CachedProfile>();
 
-            var db = _redis.GetDatabase();
-            var value= await db.StringGetAsync(redisKey);
+            var value= await _redis.GetStringAsync(redisKey);
+            
             if (!string.IsNullOrEmpty(value))
             {
                 result = JsonConvert.DeserializeObject<List<CachedProfile>>(value.ToString());
@@ -42,8 +44,7 @@ namespace SkillTracker.Search.Cache
 
         public async Task Write(string json)
         {
-            var db = _redis.GetDatabase();
-            await db.StringSetAsync(redisKey, json);
+            await _redis.SetStringAsync(redisKey, json);
             _logger.LogInformation("Redis:Cache refreshed");
         }
     }
