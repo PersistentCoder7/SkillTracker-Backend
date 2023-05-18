@@ -400,3 +400,6 @@ FodyWeavers.xsd
 /SkillTracker.Profile.Api/appsettings.json
 /SkillTracker.Profile.Api/appsettings.json
 /SkillTracker.Search.Api/appsettings.json
+/SkillTracker.Profile.Api/appsettings.Cloud.json
+/SkillTracker.Search.Api/Properties
+/SkillTracker.Search.Api/appsettings.Cloud.json
