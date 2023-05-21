@@ -18,7 +18,7 @@ namespace SkillTracker.Profile.Api.Extensions
 
             logger.LogInformation($"SB connection string: {connectionString}"); // Log the parsed connection string
 
-            if (builder.Environment.EnvironmentName.Equals("Cloud")) // Check if message broker is "Cloud"
+            if (builder.Environment.EnvironmentName.Equals("Production")) // Check if message broker is "Cloud"
             {
                 builder.Services.AddMassTransit(x =>
                 {
@@ -27,23 +27,23 @@ namespace SkillTracker.Profile.Api.Extensions
                     {
                         cfg.Host(connectionString);
                         // Configure the queues for your consumers
-                        cfg.ReceiveEndpoint("add-profile-queue", e =>
-                        {
-                            e.Consumer<AddProfileConsumer>(context);
-                            e.AutoStart = true;
-                        });
+                        //cfg.ReceiveEndpoint("add-profile-queue", e =>
+                        //{
+                        //    e.Consumer<AddProfileConsumer>(context);
+                        //    e.AutoStart = true;
+                        //});
 
-                        cfg.ReceiveEndpoint("update-profile-queue", e =>
-                        {
-                            e.Consumer<UpdateProfileConsumer>(context);
-                            e.AutoStart = true;
-                        });
+                        //cfg.ReceiveEndpoint("update-profile-queue", e =>
+                        //{
+                        //    e.Consumer<UpdateProfileConsumer>(context);
+                        //    e.AutoStart = true;
+                        //});
 
-                        cfg.ReceiveEndpoint("refresh-cache-queue", e =>
-                        {
-                            e.Consumer<RefreshCacheEventConsumer>(context);
-                            e.AutoStart = true;
-                        });
+                        //cfg.ReceiveEndpoint("refresh-cache-queue", e =>
+                        //{
+                        //    e.Consumer<RefreshCacheEventConsumer>(context);
+                        //    e.AutoStart = true;
+                        //});
                         cfg.ConfigureEndpoints(context);
                     });
                     
