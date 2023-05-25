@@ -31,6 +31,7 @@ public class GlobalExceptionHandlingMiddleware : IMiddleware
             var customErrorAttributes = context.GetEndpoint()?.Metadata?.GetOrderedMetadata<CustomErrorMessageAttribute>();
             if (customErrorAttributes != null)
             {
+                _logger.LogInformation("ErrorMessageOverridden: The error message was generated based on the custom attributes defined on the method");
                 var lastCustomErrorAttribute = customErrorAttributes[customErrorAttributes.Count - 1];
                 var customError = new CustomErrorException(lastCustomErrorAttribute.ErrorMessage,
                     lastCustomErrorAttribute.StatusCode);
@@ -39,6 +40,7 @@ public class GlobalExceptionHandlingMiddleware : IMiddleware
             }
             else
             {
+                _logger.LogInformation("ErrorMessageOverridden: The Unhandled generic exception method message was generated");
                 var customError = new CustomErrorException("Server:An unexpected error occurred.",
                     (int)HttpStatusCode.InternalServerError);
 

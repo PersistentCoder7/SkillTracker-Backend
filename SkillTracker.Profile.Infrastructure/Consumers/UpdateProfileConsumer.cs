@@ -10,14 +10,17 @@ namespace SkillTracker.Profile.Infrastructure.Consumers
     {
         private readonly IProfileRepository _repository;
         private readonly IBus _bus;
+        private readonly ILogger<UpdateProfileConsumer> _logger;
 
-        public UpdateProfileConsumer(IProfileRepository repository,IBus bus)
+        public UpdateProfileConsumer(IProfileRepository repository,IBus bus,ILogger<UpdateProfileConsumer> logger)
         {
             _repository = repository;
             _bus = bus;
+            _logger = logger;
         }
         public async Task Consume(ConsumeContext<UpdateProfileMessage> context)
         {
+            _logger.LogInformation($"Updating profile {context.Message.AssociateId} to database");
             await _repository.UpdateProfile(new Domain.Models.UpdateProfile()
             {
                 AssociateId = context.Message.AssociateId,

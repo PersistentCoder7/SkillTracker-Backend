@@ -36,6 +36,7 @@ public class SearchController : ControllerBase
     [CustomErrorMessage("An error occurred while processing your search request.",500)]
     public async Task<List<CachedProfile>> Search([FromBody]SearchProfileRequest request)
     {
+        _logger.LogInformation("Search is invoked");
         //var response = await SearchProfileAsync(request);
         var response = await _service.Search(new SearchCriteria(request.AssociateId, request.Name, request.SkillId));
 

@@ -28,6 +28,7 @@ namespace SkillTracker.Profile.Infrastructure.Consumers
         }
         public async Task Consume(ConsumeContext<RefreshCacheEvent> context)
         {
+            _logger.LogInformation($"Updating redis cache propagate the db changes");
             var profiles = await _repository.GetProfiles();
             
             string json = JsonConvert.SerializeObject(profiles);

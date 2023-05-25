@@ -46,7 +46,7 @@ COPY SkillTracker.Search.Domain/.				./SkillTracker.Search.Domain/.
 #RUN dotnet publish -c Release -o out
 
 FROM build AS publish
-RUN dotnet publish "SkillTracker.Profile.Api/SkillTracker.Profile.Api.csproj" -c Local -o /app/publish
+RUN dotnet publish "SkillTracker.Profile.Api/SkillTracker.Profile.Api.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app

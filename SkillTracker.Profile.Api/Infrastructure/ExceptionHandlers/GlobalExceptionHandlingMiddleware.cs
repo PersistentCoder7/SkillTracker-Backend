@@ -32,7 +32,7 @@ public class GlobalExceptionHandlingMiddleware : IMiddleware
         }
     }
 
-    private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private  async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         var httpStatusCode = (int)HttpStatusCode.InternalServerError;
         var content = "Server:An unexpected error occurred.";
@@ -62,10 +62,12 @@ public class GlobalExceptionHandlingMiddleware : IMiddleware
         }
 
         var customException = new CustomErrorException(content, httpStatusCode);
+        _logger.LogInformation("ErrorMessageOverridden: Override exception to a more specific exception");
+        _logger.LogError(customException, customException.Message);
         await WriteToResponseStream(context, customException);
     }
 
-    private static async Task WriteToResponseStream(HttpContext context, CustomErrorException customError)
+    private  async Task WriteToResponseStream(HttpContext context, CustomErrorException customError)
     {
         context.Response.StatusCode = customError.StatusCode;
         context.Response.ContentType = "application/json";

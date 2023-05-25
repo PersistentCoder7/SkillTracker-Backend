@@ -18,6 +18,9 @@ public class Program
         builder.Logging.AddConsole();
         var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
 
+        //Log the environment name
+        logger.LogInformation($"SkillTracker.Search.Api Environment: {builder.Environment.EnvironmentName}");
+
         //Register a common global exception handler
         builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
 

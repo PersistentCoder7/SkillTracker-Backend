@@ -17,6 +17,9 @@ public class Program
         builder.Logging.AddConsole();
         var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<Program>>();
 
+        //Log the environment name
+        logger.LogInformation($"SkillTracker.Profile.Api Environment: {builder.Environment.EnvironmentName}");
+
         // Register Controllers.
         builder.Services.AddControllers();
 

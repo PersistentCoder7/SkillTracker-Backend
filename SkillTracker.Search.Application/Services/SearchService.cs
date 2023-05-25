@@ -27,13 +27,14 @@ public class SearchService : ISearchService
         
         if (!string.IsNullOrEmpty(searchCriteria.AssociateId))
         {
-            //_logger.LogInformation($"Search profile in CosmosDB for Associate: {AssociateId}");
+            _logger.LogInformation($"Cache search where AssociateID: {searchCriteria.AssociateId}");
             var x =
                 cachedProfiles.FirstOrDefault(s => s.AssociateId.ToLower() == searchCriteria.AssociateId.ToLower());
             if (x != null) result.Add(x);
         }
         else if (!string.IsNullOrEmpty(searchCriteria.Name))
         {
+            _logger.LogInformation($"Cache search where Associate name starts with: {searchCriteria.Name}");
             var y = cachedProfiles
                 .Where(s => s.Name.ToLower().StartsWith(searchCriteria.Name.ToLower()))
                 .ToList();
@@ -41,6 +42,7 @@ public class SearchService : ISearchService
         }
         else if (searchCriteria.SkillId>0)
         {
+            _logger.LogInformation($"Cache search where SkillId : {searchCriteria.SkillId} and proficiency is greater than 10");
             var z = cachedProfiles
                 .Where(c => c.Skills.Any(skill => skill.SkillId == searchCriteria.SkillId && skill.Proficiency > 10))
                 .ToList();

@@ -15,10 +15,12 @@ namespace SkillTracker.Profile.Api.Controllers;
 public class ProfileController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly ILogger<ProfileController> _logger;
 
-    public ProfileController(IMediator mediator)
+    public ProfileController(IMediator mediator, ILogger<ProfileController> logger)
     {
         _mediator = mediator;
+        _logger = logger;
     }
 
     /// <summary>
@@ -29,6 +31,7 @@ public class ProfileController : ControllerBase
     [CustomErrorMessage("An error occurred while processing your request.")]
     public async Task<ActionResult<Domain.Models.Profile>> GetProfile(string id)
     {
+        _logger.LogInformation("GetProfile is invoked");
         Domain.Models.Profile profile = await GetProfileAsync(id);
         return Ok(profile);
     }
@@ -45,6 +48,7 @@ public class ProfileController : ControllerBase
     [CustomErrorMessage("An error occurred while processing your request.", 500)]
     public async Task<IActionResult> Post([FromBody] AddProfileRequest request)
     {
+        _logger.LogInformation("AddProfile is invoked");
         await AddProfileAsync(request: request);
         return Ok(request);
     }
@@ -67,6 +71,7 @@ public class ProfileController : ControllerBase
     [CustomErrorMessage("An error occurred while processing your request.", 500)]
     public async Task<ActionResult<int>> UpdateProfile([FromBody] UpdateProfileRequest request)
     {
+        _logger.LogInformation("UpdateProfile is invoked");
         await UpdateProfileAsync(request: request);
         return NoContent();
     }
